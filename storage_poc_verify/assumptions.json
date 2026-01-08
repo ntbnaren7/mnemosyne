@@ -1,0 +1,24 @@
+{
+  "asm_a046c6d3": {
+    "id": "asm_a046c6d3",
+    "statement": "The SaaS / AI market values transparency and technical depth.",
+    "supporting_insights": [],
+    "current_confidence": 0.8,
+    "risk_level": "low",
+    "last_validated_at": "2026-01-08T13:41:02.131163",
+    "invalidation_signals": [],
+    "created_at": "2026-01-08T13:41:02.131163",
+    "decay_rate": 0.01
+  },
+  "asm_b08f73b8": {
+    "id": "asm_b08f73b8",
+    "statement": "The SaaS / AI market values transparency and technical depth.",
+    "supporting_insights": [],
+    "current_confidence": 0.8,
+    "risk_level": "low",
+    "last_validated_at": "2026-01-08T13:51:55.276035",
+    "invalidation_signals": [],
+    "created_at": "2026-01-08T13:51:55.276035",
+    "decay_rate": 0.01
+  }
+}
