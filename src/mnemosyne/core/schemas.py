@@ -79,6 +79,36 @@ class StrategyChange(BaseModel):
     review_horizon: datetime
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
+# V0.5 Visual Schemas (Strict)
+class VisualIntent(BaseModel):
+    """Strict, minimal visual attributes for testing causal impact."""
+    human_presence: str = Field(..., description="'none', 'explicit'")
+    face_count: str = Field(..., description="'0', '1-2'")
+    visual_style: str = Field(..., description="'abstract', 'illustrative'")
+    composition: str = Field(..., description="'text_led', 'subject_centered'")
+
+    def to_prompt_string(self) -> str:
+        return f"{self.visual_style} style, {self.composition}, {self.human_presence} human presence, {self.face_count} faces"
+
+class ImageArtifact(BaseModel):
+    """The output of an ImageRenderer."""
+    artifact_id: str
+    visual_intent_used: VisualIntent
+    renderer_name: str
+    file_path: str
+    fidelity_notes: Optional[str] = None
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+class Creative(BaseModel):
+    """A generated creative asset schema."""
+    id: str
+    post_id: str
+    asset_type: str = "image"
+    content: str  # Description or Prompt
+    visual_intent: Optional[VisualIntent] = None
+    image_artifact: Optional[ImageArtifact] = None
+    status: str = "draft"
+
 class Organization(BaseModel):
     """Represents the strategic identity of a company/entity."""
     id: str
@@ -98,13 +128,6 @@ class Narrative(BaseModel):
     active: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
-class Creative(BaseModel):
-    """Metadata for visual or creative assets."""
-    id: str
-    type: str  # e.g., "image", "video"
-    attributes: Dict[str, Any]  # Explicit visual attributes, not vibes
-    prompt_metadata: Optional[str] = None
-    url: Optional[str] = None
 
 class Post(BaseModel):
     """A single piece of content within a narrative."""

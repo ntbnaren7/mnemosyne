@@ -1,10 +1,13 @@
 from datetime import datetime
 from typing import Dict, Any, List
+import uuid
 from ..core.schemas import (
     ReasoningLoop, ReasoningStep, LoopStage, Post, Creative, 
-    Insight, InsightContradiction, IntentType, AuthorType, StrategyChange, RiskLevel
+    Insight, InsightContradiction, IntentType, AuthorType, StrategyChange, RiskLevel,
+    VisualIntent, ImageArtifact
 )
 from ..core.interfaces import ReasoningAgent
+from .renderer import MockStableDiffusionRenderer
 
 class BaseMockAgent:
     """Helper for mock agents to create steps with rationale."""
@@ -67,31 +70,46 @@ class PlanAgent(BaseMockAgent, ReasoningAgent):
         )
 
 class GenerateAgent(BaseMockAgent, ReasoningAgent):
+    def __init__(self):
+        self.renderer = MockStableDiffusionRenderer()
+
     async def process(self, loop: ReasoningLoop, context: Dict[str, Any]) -> ReasoningStep:
-        intent = "Generate content drafts based on the active plan."
-        hypothesis = "Visualizing the 'Reasoning Loop' will trigger more clarify-seeking comments."
-        rationale = "The previous step decided to focus on simplicity. A diagram is the simplest way to explain the loop."
+        intent = "Create assets aligned with the plan."
         
-        # In V0, we mock the content generation
-        post = Post(
-            id="post_001",
-            narrative_id=context.get("narrative").id,
-            content_text="Mnemosyne is the brain of Simbli. It thinks before it speaks.",
-            platform="Twitter",
-            creatives=[Creative(id="img_001", type="image", attributes={"subject": "abstract brain network", "style": "minimalist"})]
-        )
+        # Determine Visual Intent from Context
+        # For V0.5 Test, we assume the Plan or Context specifies the Visual Intent
+        requested_visual_intent = context.get("requested_visual_intent")
         
-        decisions = [f"Created draft post: {post.id}", "Requested minimalist creative asset"]
-        context["post"] = post
-        context_used = [context.get("narrative").id]
+        decisions = []
         
+        if requested_visual_intent:
+            visual_intent = requested_visual_intent
+            image_artifact = await self.renderer.render(visual_intent)
+            
+            # Create Creative Asset
+            creative = Creative(
+                id=f"crt_{uuid.uuid4().hex[:8]}",
+                post_id="pending",
+                asset_type="image",
+                content="Visual asset based on strategic intent",
+                visual_intent=visual_intent,
+                image_artifact=image_artifact,
+                status="generated"
+            )
+            # Store in context for Publish/Observe stages to reference
+            context["generated_creative"] = creative
+            
+            decisions.append(f"Generated Image {image_artifact.artifact_id} with Intent: {visual_intent.to_prompt_string()}")
+            decisions.append(f"Created Creative {creative.id}")
+        else:
+            decisions.append("Created draft post: post_001")
+            decisions.append("Requested minimalist creative asset (Text Only)")
+            
         return self.create_step(
             stage=LoopStage.GENERATE, 
             intent=intent, 
-            rationale=rationale, 
-            decisions=decisions, 
-            context_used=context_used, 
-            hypothesis=hypothesis
+            rationale="Executed visual production using Stable Diffusion Renderer.", 
+            decisions=decisions
         )
 
 class PublishAgent(BaseMockAgent, ReasoningAgent):
@@ -145,6 +163,21 @@ class InterpretAgent(BaseMockAgent, ReasoningAgent):
         
         decisions = []
         contradictions = []
+        
+        # V0.5 Causal Analysis: Did visual attributes affect intent?
+        generated_creative = context.get("generated_creative")
+        if generated_creative and generated_creative.visual_intent:
+            v_intent = generated_creative.visual_intent
+            
+            # Hypothesis: "Human presence increases identity-seeking questions"
+            identity_questions = [c for c in comments if "contact" in c.content.lower() or "who" in c.content.lower()]
+            
+            if v_intent.human_presence == "explicit" and len(identity_questions) > 0:
+                 decisions.append(f"CAUSAL LINK FOUND: Explicit human presence -> {len(identity_questions)} identity signals.")
+                 # Strengthen assumption if it exists
+            elif v_intent.human_presence == "none" and len(identity_questions) == 0:
+                 decisions.append("CAUSAL LINK FOUND: No human presence -> Zero identity signals.")
+            
         
         # Scenario-specific contradiction check for Demo
         # Insight: "Employee-led content increases genuine questions"

@@ -1,0 +1,26 @@
+--- MNEMOSYNE V0.5: VISUAL SIGNAL VALIDATION ---
+
+[EXPERIMENT 1: CONTROL] (No Human Presence)
+  LoopStage.GENERATE: ['Assign employee-led content piece', 'Target existing technical audience']
+  LoopStage.PUBLISH: ['Generated Image img_83748a10 with Intent: abstract style, text_led, none human presence, 0 faces', 'Created Creative crt_7fa3d029']
+  LoopStage.OBSERVE: ['Awaiting human sign-off on Post post_001']
+  LoopStage.INTERPRET: ['Ingested 3 comments from platform export']
+DEBUG: InterpretAgent - HumanPresence: none
+DEBUG: InterpretAgent - IdentityQuestions: 0
+DEBUG: InterpretAgent - Comments: ['Nice generic graphic.', 'Clean design.', 'Good update.']
+  LoopStage.ADAPT: ['CAUSAL LINK FOUND: No human presence -> Zero identity signals.', 'No active contradictions detected in high-signal comments.']
+  LoopStage.PLAN: ['No changes required.']
+
+[EXPERIMENT 2: VARIANT] (Explicit Human Presence)
+  LoopStage.GENERATE: ['Assign employee-led content piece', 'Target existing technical audience']
+  LoopStage.PUBLISH: ['Generated Image img_20a9173c with Intent: illustrative style, subject_centered, explicit human presence, 1-2 faces', 'Created Creative crt_c7962769']
+  LoopStage.OBSERVE: ['Awaiting human sign-off on Post post_001']
+  LoopStage.INTERPRET: ['Ingested 3 comments from platform export']
+DEBUG: InterpretAgent - HumanPresence: explicit
+DEBUG: InterpretAgent - IdentityQuestions: 2
+DEBUG: InterpretAgent - Comments: ['Who is this engineer? They look familiar.', 'Can I contact this person directly?', 'Is this a real employee or stock photo?']
+  LoopStage.ADAPT: ['CAUSAL LINK FOUND: Explicit human presence -> 2 identity signals.', 'No active contradictions detected in high-signal comments.']
+  LoopStage.PLAN: ['No changes required.']
+
+--- CONCLUSION ---
+Verifying if visual attributes caused different reasoning outcomes...
