@@ -1,0 +1,23 @@
+[
+  {
+    "insight_id": "ins_001",
+    "source_id": "dea2e32b-3ac3-4de7-8a1b-f30d6e91a158",
+    "rationale": "Observed 2 critiques/skepticism signals, contradicting expected question-led engagement.",
+    "confidence_delta": 0.3,
+    "timestamp": "2026-01-08T13:11:43.395284"
+  },
+  {
+    "insight_id": "ins_001",
+    "source_id": "496a6ee1-d6e1-4109-8239-534be29d732e",
+    "rationale": "Observed 2 critiques/skepticism signals, contradicting expected question-led engagement.",
+    "confidence_delta": 0.3,
+    "timestamp": "2026-01-08T13:12:10.156421"
+  },
+  {
+    "insight_id": "ins_001",
+    "source_id": "ec36a790-52f2-464f-a5a7-8ab6333782c1",
+    "rationale": "Observed 2 critiques/skepticism signals, contradicting expected question-led engagement.",
+    "confidence_delta": 0.3,
+    "timestamp": "2026-01-08T13:12:20.234148"
+  }
+]

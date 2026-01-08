@@ -1,0 +1,20 @@
+{
+  "simbli_intl": {
+    "id": "simbli_intl",
+    "name": "Simbli",
+    "mission": "Organize the world's strategic intelligence.",
+    "core_values": [
+      "Transparency",
+      "Memory",
+      "Precision"
+    ],
+    "target_audience": [
+      "AI Engineers",
+      "Strategists"
+    ],
+    "strategic_priorities": [
+      "Launch Mnemosyne V0",
+      "Educate on Loop-based reasoning"
+    ]
+  }
+}

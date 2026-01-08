@@ -1,0 +1,16 @@
+{
+  "narrative_001": {
+    "id": "narrative_001",
+    "org_id": "simbli_intl",
+    "title": "Introducing the Brain",
+    "objectives": [
+      "Establish Mnemosyne as a distinct layer"
+    ],
+    "key_messages": [
+      "Not a UI",
+      "Strategic continuity focus"
+    ],
+    "active": true,
+    "created_at": "2026-01-08T11:54:55.121628"
+  }
+}

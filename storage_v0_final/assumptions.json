@@ -1,0 +1,18 @@
+{
+  "asm_001": {
+    "id": "asm_001",
+    "statement": "A technical audience trusts individual engineers more than brand channels.",
+    "supporting_insights": [
+      "ins_001"
+    ],
+    "current_confidence": 0.95,
+    "risk_level": "low",
+    "last_validated_at": "2026-01-08T13:12:20.234148",
+    "invalidation_signals": [
+      "Skepticism about 'staged' employee content",
+      "Fatigue with personal brand posts"
+    ],
+    "created_at": "2026-01-08T13:12:20.234148",
+    "decay_rate": 0.01
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "e8420f01-27f6-405e-86ae-2857184d3b6b": {
+    "id": "e8420f01-27f6-405e-86ae-2857184d3b6b",
+    "org_id": "simbli_intl",
+    "steps": [
+      {
+        "stage": "PLAN",
+        "intent": "Develop a content plan for narrative: Introducing the Brain",
+        "context_used": [
+          "simbli_intl",
+          "narrative_001"
+        ],
+        "hypothesis": "Focusing on core values will increase high-signal engagement (questions).",
+        "decisions": [
+          "Focus on 'Simplicity' value",
+          "Target 'Early Adopters' segment"
+        ],
+        "rationale": "Based on Simbli's mission, we need to bridge the gap between technical specs and user value.",
+        "human_approved": false,
+        "timestamp": "2026-01-08T11:54:55.122634"
+      },
+      {
+        "stage": "GENERATE",
+        "intent": "Generate content drafts based on the active plan.",
+        "context_used": [
+          "narrative_001"
+        ],
+        "hypothesis": "Visualizing the 'Reasoning Loop' will trigger more clarify-seeking comments.",
+        "decisions": [
+          "Created draft post: post_001",
+          "Requested minimalist creative asset"
+        ],
+        "rationale": "The previous step decided to focus on simplicity. A diagram is the simplest way to explain the loop.",
+        "human_approved": false,
+        "timestamp": "2026-01-08T11:54:55.122634"
+      },
+      {
+        "stage": "PUBLISH",
+        "intent": "Obtain human approval for publishing.",
+        "context_used": [],
+        "hypothesis": null,
+        "decisions": [
+          "Awaiting human sign-off on Post post_001"
+        ],
+        "rationale": "V0 Mandate: All publishing requires human-in-the-loop.",
+        "human_approved": false,
+        "timestamp": "2026-01-08T11:54:55.122634"
+      },
+      {
+        "stage": "OBSERVE",
+        "intent": "Collect signals from the published post.",
+        "context_used": [],
+        "hypothesis": null,
+        "decisions": [
+          "Captured 3 comments",
+          "Recorded engagement metrics"
+        ],
+        "rationale": "We need raw performance data and high-signal comments to test our hypothesis.",
+        "human_approved": false,
+        "timestamp": "2026-01-08T11:54:55.123904"
+      },
+      {
+        "stage": "INTERPRET",
+        "intent": "Analyze signals and evaluate hypothesis.",
+        "context_used": [],
+        "hypothesis": null,
+        "decisions": [
+          "Hypothesis success: True",
+          "Identified need for technical deep-dive on memory architecture"
+        ],
+        "rationale": "Comments are technical and clarify-seeking, confirming high-signal interest in mechanics.",
+        "human_approved": false,
+        "timestamp": "2026-01-08T11:54:55.123904"
+      },
+      {
+        "stage": "ADAPT",
+        "intent": "Refine strategy based on interpretations.",
+        "context_used": [],
+        "hypothesis": null,
+        "decisions": [
+          "Update Narrative objectives to include 'Technical Transparency'",
+          "Promote 'Is this open source?' to a strategic FAQ"
+        ],
+        "rationale": "Users are asking 'how' it works, so the next narrative should focus on architecture transparency.",
+        "human_approved": false,
+        "timestamp": "2026-01-08T11:54:55.123904"
+      }
+    ],
+    "current_stage": "PLAN"
+  }
+}

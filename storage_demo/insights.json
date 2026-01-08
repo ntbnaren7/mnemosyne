@@ -1,0 +1,13 @@
+{
+  "ins_001": {
+    "id": "ins_001",
+    "content": "Employee-led content increases genuine questions and high-signal engagement.",
+    "confidence": 0.6000000000000001,
+    "source_loop_ids": [
+      "loop_past_001"
+    ],
+    "created_at": "2026-01-08T12:04:39.108566",
+    "last_updated": "2026-01-08T12:04:39.108566",
+    "decay_rate": 0.01
+  }
+}

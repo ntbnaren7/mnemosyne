@@ -1,0 +1,62 @@
+[
+  {
+    "id": "sc_51a6cc08",
+    "insight_id": "ins_001",
+    "related_assumption_ids": [],
+    "previous_assumption": "Employee-led content increases genuine questions and high-signal engagement.",
+    "triggering_signals": [
+      "Another employee post. Seems like corporate fatigue is setting in.",
+      "I'm skeptical about this 'brain' metaphor. Sounds like marketing fluff."
+    ],
+    "confidence_from": 0.9,
+    "confidence_to": 0.6000000000000001,
+    "decision": "Shift content focus from internal engineering narratives to technical transparency documentation.",
+    "justification": "We observed significant fatigue and skepticism from our audience regarding 'corporate/employee' narratives. The signals suggest that purely internal engineer voices are being perceived as 'marketing fluff'. To maintain trust, we must pivot to more objective, documentation-style technical content.",
+    "acknowledged_risks": [
+      "This move might decrease initial engagement volume (virality).",
+      "Engineering team might feel less directly involved in the narrative."
+    ],
+    "review_horizon": "2026-02-08T00:00:00",
+    "timestamp": "2026-01-08T13:11:43.395284"
+  },
+  {
+    "id": "sc_b654ea28",
+    "insight_id": "ins_001",
+    "related_assumption_ids": [],
+    "previous_assumption": "Employee-led content increases genuine questions and high-signal engagement.",
+    "triggering_signals": [
+      "Another employee post. Seems like corporate fatigue is setting in.",
+      "I'm skeptical about this 'brain' metaphor. Sounds like marketing fluff."
+    ],
+    "confidence_from": 0.9,
+    "confidence_to": 0.6000000000000001,
+    "decision": "Shift content focus from internal engineering narratives to technical transparency documentation.",
+    "justification": "We observed significant fatigue and skepticism from our audience regarding 'corporate/employee' narratives. The signals suggest that purely internal engineer voices are being perceived as 'marketing fluff'. To maintain trust, we must pivot to more objective, documentation-style technical content.",
+    "acknowledged_risks": [
+      "This move might decrease initial engagement volume (virality).",
+      "Engineering team might feel less directly involved in the narrative."
+    ],
+    "review_horizon": "2026-02-08T00:00:00",
+    "timestamp": "2026-01-08T13:12:10.156421"
+  },
+  {
+    "id": "sc_b78f2779",
+    "insight_id": "ins_001",
+    "related_assumption_ids": [],
+    "previous_assumption": "Employee-led content increases genuine questions and high-signal engagement.",
+    "triggering_signals": [
+      "Another employee post. Seems like corporate fatigue is setting in.",
+      "I'm skeptical about this 'brain' metaphor. Sounds like marketing fluff."
+    ],
+    "confidence_from": 0.9,
+    "confidence_to": 0.6000000000000001,
+    "decision": "Shift content focus from internal engineering narratives to technical transparency documentation.",
+    "justification": "We observed significant fatigue and skepticism from our audience regarding 'corporate/employee' narratives. The signals suggest that purely internal engineer voices are being perceived as 'marketing fluff'. To maintain trust, we must pivot to more objective, documentation-style technical content.",
+    "acknowledged_risks": [
+      "This move might decrease initial engagement volume (virality).",
+      "Engineering team might feel less directly involved in the narrative."
+    ],
+    "review_horizon": "2026-02-08T00:00:00",
+    "timestamp": "2026-01-08T13:12:20.234148"
+  }
+]

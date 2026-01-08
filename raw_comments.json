@@ -1,0 +1,20 @@
+[
+    {
+        "text": "Another employee post. Seems like corporate fatigue is setting in.",
+        "author": "user123",
+        "author_type": "customer",
+        "timestamp": "2026-01-08T10:00:00"
+    },
+    {
+        "text": "I'm skeptical about this 'brain' metaphor. Sounds like marketing fluff.",
+        "author": "skeptic_ai",
+        "author_type": "unknown",
+        "timestamp": "2026-01-08T10:05:00"
+    },
+    {
+        "text": "Is this actually doing any reasoning or just rephrasing templates?",
+        "author": "tech_lead",
+        "author_type": "candidate",
+        "timestamp": "2026-01-08T10:10:00"
+    }
+]

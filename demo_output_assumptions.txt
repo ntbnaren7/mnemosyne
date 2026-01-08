@@ -1,0 +1,43 @@
+--- MNEMOSYNE V0: EXPLICIT ASSUMPTIONS DEMO ---
+
+[INITIAL STATE]
+Assumption: A technical audience trusts individual engineers more than brand channels.
+Confidence: 0.95
+Risk Level: RiskLevel.LOW
+
+[STAGING] Testing Mandatory Assumption Binding...
+  Caught Expected Error: CRITICAL: Planning failed. Every PLAN step MUST reference at least one active Assumption OR explicitly record a justification for ignoring existing memory.
+
+Starting Valid Loop: ec36a790-52f2-464f-a5a7-8ab6333782c1
+
+--- Stage: LoopStage.PLAN ---
+  Decisions: ['Assign employee-led content piece', 'Target existing technical audience']
+
+--- Stage: LoopStage.GENERATE ---
+  Decisions: ['Created draft post: post_001', 'Requested minimalist creative asset']
+
+--- Stage: LoopStage.PUBLISH ---
+  Decisions: ['Awaiting human sign-off on Post post_001']
+
+--- Stage: LoopStage.OBSERVE ---
+  Decisions: ['Ingested 3 comments from platform export']
+
+--- Stage: LoopStage.INTERPRET ---
+  Decisions: ['DETECTED CONTRADICTION for Insight ins_001 (0.90 -> 0.60)']
+
+--- Stage: LoopStage.ADAPT ---
+  Decisions: ['Emit StrategyChange sc_b78f2779', 'Weakened Assumption N/A', 'Update future narrative templates']
+
+  [STRATEGY CHANGE EMITTED] ID: sc_b78f2779
+  DECISION: Shift content focus from internal engineering narratives to technical transparency documentation.
+  JUSTIFICATION: We observed significant fatigue and skepticism from our audience regarding 'corporate/employee' narratives. The signals suggest that purely internal engineer voices are being perceived as 'marketing fluff'. To maintain trust, we must pivot to more objective, documentation-style technical content.
+
+--- FINAL ASSUMPTION STATE ---
+Assumption: A technical audience trusts individual engineers more than brand channels.
+Confidence: 0.95
+Risk Level: RiskLevel.LOW
+RESULT: Risk Level did not escalate. Logic check required.
+
+[STAGING] Testing Planning with High Risk Assumption...
+  Start of Next Loop (Plan Decisions): ['Assign employee-led content piece', 'Target existing technical audience', 'WARNING: Proceeding with High Risk Assumption asm_001. Validation required.']
+RESULT: System correctly flagged High Risk Assumption in planning.

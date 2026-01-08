@@ -1,0 +1,15 @@
+{
+  "narrative_demo": {
+    "id": "narrative_demo",
+    "org_id": "simbli_intl",
+    "title": "Scaling Employee Voice",
+    "objectives": [
+      "Establish trust through internal transparency"
+    ],
+    "key_messages": [
+      "Our engineers are the source of truth"
+    ],
+    "active": true,
+    "created_at": "2026-01-08T12:04:39.108566"
+  }
+}
