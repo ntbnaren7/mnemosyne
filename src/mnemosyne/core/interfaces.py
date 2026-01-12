@@ -1,25 +1,21 @@
 from typing import Protocol, runtime_checkable, Any, Dict
-from .schemas import (
-    ReasoningLoop, ReasoningStep, LoopStage, Insight, Organization, Narrative,
-    VisualIntent, ImageArtifact
-)
+from .schemas import ReasoningLoop, ReasoningStep, LoopStage
 
 @runtime_checkable
 class ReasoningAgent(Protocol):
-    """Protocol for any agent in the reasoning loop."""
+    """Interface for a modular reasoning component."""
+    
     async def process(self, loop: ReasoningLoop, context: Dict[str, Any]) -> ReasoningStep:
         """
         Execute a step in the reasoning loop.
         
+        Args:
+            loop: The current state of the reasoning loop.
+            context: Additional external context (org data, previous results).
+            
         Returns:
             A ReasoningStep containing decisions and rationale.
         """
-        ...
-
-@runtime_checkable
-class ImageRenderer(Protocol):
-    """Protocol for converting visual intent into an artifact."""
-    async def render(self, intent: VisualIntent) -> ImageArtifact:
         ...
 
 class LoopOrchestrator:
