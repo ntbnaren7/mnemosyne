@@ -34,6 +34,11 @@ class LinkStrength(str, Enum):
     MODERATE = "moderate"
     STRONG = "strong"
 
+class AuthorityLevel(str, Enum):
+    OBSERVER = "observer"
+    STRATEGIST = "strategist"
+    EXECUTIVE = "executive"
+
 class RiskLevel(str, Enum):
     LOW = "low"
     MEDIUM = "medium"
@@ -86,6 +91,20 @@ class StrategyChange(BaseModel):
     acknowledged_risks: List[str]
     review_horizon: datetime
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+class Override(BaseModel):
+    """
+    V3 Governance Primitive.
+    Records an explicit authority intervention to override system logic.
+    """
+    id: str
+    target_id: str # ID of the Assumption, Plan (step), or StrategyChange
+    previous_state: str # Snapshot of state before override
+    override_action: str # The mandated value or action
+    rationale: str 
+    authority_level: AuthorityLevel
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    active: bool = True
 
 class Organization(BaseModel):
     """Represents the strategic identity of a company/entity."""

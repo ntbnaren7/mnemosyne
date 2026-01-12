@@ -3,7 +3,8 @@ import os
 from datetime import datetime
 from typing import Dict, List, Optional
 from ..core.schemas import (
-    Organization, Narrative, ReasoningLoop, Insight, InsightContradiction, StrategyChange, Assumption, RiskLevel
+    Organization, Narrative, ReasoningLoop, Insight, InsightContradiction, StrategyChange, Assumption, RiskLevel,
+    Override
 )
 
 MAX_CONFIDENCE_DROP_PER_CYCLE = 0.20
@@ -21,6 +22,7 @@ class MemoryManager:
         self.assumptions: Dict[str, Assumption] = {}
         self.contradictions: List[InsightContradiction] = []
         self.strategy_changes: List[StrategyChange] = []
+        self.overrides: List[Override] = []
         
         if not os.path.exists(self.storage_dir):
             os.makedirs(self.storage_dir)
@@ -44,6 +46,8 @@ class MemoryManager:
             json.dump({k: v.model_dump(mode='json') for k, v in self.assumptions.items()}, f, indent=2)
         with open(self._get_path("strategy_changes"), "w") as f:
             json.dump([v.model_dump(mode='json') for v in self.strategy_changes], f, indent=2)
+        with open(self._get_path("overrides"), "w") as f:
+            json.dump([v.model_dump(mode='json') for v in self.overrides], f, indent=2)
 
     def _load(self):
         try:
@@ -75,6 +79,10 @@ class MemoryManager:
                 with open(self._get_path("strategy_changes"), "r") as f:
                     data = json.load(f)
                     self.strategy_changes = [StrategyChange(**v) for v in data]
+            if os.path.exists(self._get_path("overrides")):
+                with open(self._get_path("overrides"), "r") as f:
+                    data = json.load(f)
+                    self.overrides = [Override(**v) for v in data]
         except Exception as e:
             print(f"Warning: Could not load memory: {e}")
 
@@ -152,6 +160,26 @@ class MemoryManager:
         if insight_id:
             changes = [c for c in changes if c.insight_id == insight_id]
         return changes
+
+    def add_override(self, override: Override):
+        """V3 Governance: Explicitly logs a human override."""
+        # Deactivate any previous overrides for this target
+        for o in self.overrides:
+            if o.target_id == override.target_id and o.active:
+                o.active = False
+        self.overrides.append(override)
+        self._save()
+
+    def get_active_override(self, target_id: str) -> Optional[Override]:
+        """Returns the active override for a target, if any."""
+        for o in reversed(self.overrides):
+            if o.target_id == target_id and o.active:
+                return o
+        return None
+
+    def get_override_debt(self) -> List[Override]:
+        """Returns all currently active overrides (Debt)."""
+        return [o for o in self.overrides if o.active]
 
     def add_assumption(self, assumption: Assumption):
         self.assumptions[assumption.id] = assumption

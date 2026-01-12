@@ -1,0 +1,26 @@
+--- MNEMOSYNE V3: GOVERNANCE & OVERRIDE DEMO ---
+
+[SYSTEM INTELLIGENCE]
+Based on 90% Confidence in 'Slow Markets', Mnemosyne Recommendation:
+  -> Execute Plan A: Conservative Growth (Low Risk)
+  [!] Active Override Detected: Execute Plan B: Aggressive Market Entry (High Risk)
+
+[HUMAN INTERVENTION REQUESTED]
+Target: plan_launch_q1
+Current State: Execute Plan A: Conservative Growth (Low Risk)
+Authority: EXECUTIVE
+Mandate: Execute Plan B: Aggressive Market Entry (High Risk)
+Rationale: External funding secured. Risk appetite increased significantly. Ignoring V1 safety for this specific launch.
+>> OVERRIDE LOGGED.
+
+[EXECUTION PHASE]
+** OVERRIDE APPLIED **
+System Recommendation: Execute Plan A: Conservative Growth (Low Risk)
+EXECUTING MANDATE: Execute Plan B: Aggressive Market Entry (High Risk)
+Authority: AuthorityLevel.EXECUTIVE
+
+[GOVERNANCE AUDIT]
+Override Debt: 1 active item(s).
+  - ovr_36c6ae2f on plan_launch_q1: 'Execute Plan B: Aggressive Market Entry (High Risk)' (Rationale: External funding secured. Risk appetite increased significantly. Ignoring V1 safety for this specific launch.)
+
+RESULT: SUCCESS. Human Authority successfully overrode System Intelligence. Debt recorded.

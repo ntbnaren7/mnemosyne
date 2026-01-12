@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ovr_ad6c3b98",
+    "target_id": "plan_launch_q1",
+    "previous_state": "Execute Plan A: Conservative Growth (Low Risk)",
+    "override_action": "Execute Plan B: Aggressive Market Entry (High Risk)",
+    "rationale": "External funding secured. Risk appetite increased significantly. Ignoring V1 safety for this specific launch.",
+    "authority_level": "executive",
+    "timestamp": "2026-01-12T08:08:21.257948",
+    "active": false
+  },
+  {
+    "id": "ovr_36c6ae2f",
+    "target_id": "plan_launch_q1",
+    "previous_state": "Execute Plan A: Conservative Growth (Low Risk)",
+    "override_action": "Execute Plan B: Aggressive Market Entry (High Risk)",
+    "rationale": "External funding secured. Risk appetite increased significantly. Ignoring V1 safety for this specific launch.",
+    "authority_level": "executive",
+    "timestamp": "2026-01-12T08:08:30.197974",
+    "active": true
+  }
+]
