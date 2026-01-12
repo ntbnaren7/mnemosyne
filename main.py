@@ -1,7 +1,12 @@
 import asyncio
 import uuid
+import sys
+import os
 from datetime import datetime, timedelta
 from typing import List
+
+# Ensure 'src' is in python path
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 from mnemosyne.core.schemas import (
     Organization, Narrative, ReasoningLoop, LoopStage, Insight, InsightContradiction,
