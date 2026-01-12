@@ -1,72 +1,60 @@
-# Mnemosyne: Project State Report
-*Last Updated: 2026-01-12*
+# Mnemosyne: Sprint Progress Report (V3 + Sandbox)
+*Status: Current Implementation Complete*
 
-This document serves as the high-level context sync for Mnemosyne. It summarizes the project's evolution, current capabilities, and architectural boundaries.
-
----
-
-## 1. System Definition
-Mnemosyne is an **Organizational Epistemic Operating System**. It tracks institutional beliefs (Assumptions), reasons about them semantically, ensures safety through confidence rails, and manages human governance over automated execution.
+This report focuses on the latest architectural additions and the resulting system state. It omits historical development logs (V0-V2) to focus on the active execution surface.
 
 ---
 
-## 2. Completed Milestones (The Evolution)
+## 1. Integrated System State
+Mnemosyne is now an **End-to-End Epistemic Sandbox**. It can bridge the transition from a strategic hypothesis to a governed creative asset.
 
-### [COMPLETED] V0: The Belief Core
-- **Primitives**: `Assumption`, `Insight`, `StrategyChange`.
-- **Function**: Defined how strategies are anchored to explicit, risk-weighted bets.
-- **Outcome**: Established the first "Why" layer for strategy.
-
-### [COMPLETED] V1: Semantic Accuracy
-- **Engine**: Local `sentence-transformers` (all-MiniLM-L6-v2).
-- **Function**: Replaced keyword matching with cosine similarity for signal interpretation.
-- **Safety**: Introduced the `MAX_CONFIDENCE_DROP_PER_CYCLE = 0.20` cap to prevent belief collapse.
-
-### [COMPLETED] V2: Temporal Intelligence
-- **Intelligence**: `TemporalAnalyzer`.
-- **Function**: Reconstructs belief trajectories to determine **Momentum**, **Volatility**, and **Health** (e.g., "Stable" vs. "Volatile/Unstable").
-- **Constraint**: Purely observational (Read-only).
-
-### [COMPLETED] V3: Governance & Override
-- **Authority**: `AuthorityLevel` (Observer, Strategist, Executive).
-- **Function**: Explicitly allows humans to mandate actions that contradict system reasoning.
-- **Debt**: Records "Override Debt" so the system remembers where it was overruled.
-
-### [COMPLETED] Content Execution Sandbox
-- **Module**: `sandbox/` (Architecturally isolated from Core).
-- **Function**: Consumes `ContentBrief` to generate assets via Gemini.
-- **Constraint**: Must NOT specify image model names; uses dynamic discovery to avoid API failures.
-- **Traceability**: Every generated image is tagged with the **Governing Assumption ID**.
+**The Current Core Capability:**
+- **Governance**: Distinguishes between what the AI "thinks" (Beliefs) and what it is "ordered to do" (Overrides).
+- **Execution**: Generates visual assets (images) that are traceable to specific governing assumptions.
 
 ---
 
-## 3. Current System State
-As of now, Mnemosyne can:
-1. **Reason**: Turn a spreadsheet of comments into a semantic critique of a strategy.
-2. **Protect**: Refuse to let a single bad day zero out a long-held belief (Safety Rail).
-3. **Analyze**: Warn a human if a belief is "Degrading" based on current trajectory.
-4. **Govern**: Execute a high-risk plan mandated by an Executive, while logging the disagreement.
-5. **Execute**: Create creative assets (images) that are mathematically linked to a specific institutional belief.
+## 2. Present Implementations
+
+### Governance & Authority (V3)
+The system now handles human intervention without corrupting belief history.
+- **Authority Model**: Explicit `EXECUTIVE` and `STRATEGIST` roles for overriding plans.
+- **Override Debt**: Tracking active deviations where human mandate differs from system confidence.
+- **Logic**: Mnemosyne acknowledges the override but preserves its original internal reasoning for audit.
+
+### Content Execution Sandbox
+A physically separate layer (`sandbox/`) for asset generation.
+- **Contract**: Use of `ContentBrief` schema as the sole interface between logic and execution.
+- **Asset Generation**: Integrated with Gemini API for image creation.
+- **Constraints Met**:
+    - **Model Autonomy**: Uses dynamic discovery (`list_models`) to avoid hardcoded versioning.
+    - **Isolation**: Mnemosyne Core does not know Gemini exists.
+    - **Traceability**: All outputs are tagged with `assumptions_referenced`.
 
 ---
 
-## 4. Key Invariants (Do Not Change)
-- **Epistemic Hierarchy**: Belief Core > Calibration/Safety > Temporal Intelligence > Consumers.
-- **Isolation**: Mnemosyne Core (Logic) must never depend on the Sandbox (Execution).
-- **Authority**: Mnemosyne explains; Humans decide.
+## 3. Technical Changes (Latest)
+- **Schemas**: Added `Override` (V3) and `ContentBrief` (Sandbox) to `schemas.py`.
+- **Infrastructure**:
+    - `sandbox/gemini_client.py`: High-level wrapper for Imagen/Gemini models.
+    - `sandbox/executor.py`: Translates high-level briefs into 5 distinct localized prompts.
+- **Demo Verification**: `run_sandbox_demo.py` confirms that a belief about "Technical Trust" can successfully dictate the visual composition of a LinkedIn post.
 
 ---
 
-## 5. Latest Technical Changes
-- Created `ContentBrief` schema in `schemas.py`.
-- Developed `sandbox/gemini_client.py` for model-agnostic image generation.
-- Implemented `ContentExecutor` to translate briefs into prompts.
-- Verified flow via `run_sandbox_demo.py`.
+## 4. Current Constraints & Invariants
+- **Frozen Logic**: Belief formation, semantic interpretation, and temporal analysis are locked.
+- **Dependency Rule**: Mnemosyne logic remains zero-dependency (Execution layers are separate).
+- **Authority Boundary**: Humans quyết định; Mnemosyne giải thích.
 
 ---
 
-## 6. Verification
-Run the following to see the latest full-stack logic:
+## 5. Execution Reference
+To verify the current present state:
 ```bash
 uv run run_sandbox_demo.py
+```
+To verify the Governance/Debt logic:
+```bash
+uv run main.py
 ```
