@@ -3,12 +3,15 @@ import os
 from typing import List, Dict, Any
 from datetime import datetime
 from ..core.schemas import Comment, AuthorType, IntentType, EmotionalIntensity
+from ..core.semantic import SemanticEngine
 
 class CommentIngestor:
     """
     V0 Comment Ingestor. 
     Classifies raw comment data based on heuristics.
     """
+    def __init__(self):
+        self.semantic = SemanticEngine()
     
     def ingest_from_file(self, file_path: str, post_id: str) -> List[Comment]:
         if not os.path.exists(file_path):
@@ -58,6 +61,7 @@ class CommentIngestor:
             post_id=post_id,
             author=author,
             author_type=author_type,
+            embedding=self.semantic.encode(text), # V1 Semantic Embedding
             content=text,
             intent=intent,
             topic_cluster=topic_cluster,

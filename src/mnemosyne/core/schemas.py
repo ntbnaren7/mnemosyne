@@ -29,6 +29,11 @@ class EmotionalIntensity(str, Enum):
     MEDIUM = "medium"
     HIGH = "high"
 
+class LinkStrength(str, Enum):
+    WEAK = "weak"
+    MODERATE = "moderate"
+    STRONG = "strong"
+
 class RiskLevel(str, Enum):
     LOW = "low"
     MEDIUM = "medium"
@@ -45,6 +50,7 @@ class Assumption(BaseModel):
     invalidation_signals: List[str] = [] # Human-readable descriptions of what would break this
     created_at: datetime = Field(default_factory=datetime.utcnow)
     decay_rate: float = 0.01
+    embedding: Optional[List[float]] = None # V1 Semantic Vector
 
 class Insight(BaseModel):
     """A strategic belief derived from interpretations."""
@@ -57,12 +63,14 @@ class Insight(BaseModel):
     decay_rate: float = 0.01  # Amount to decay per day or signal
 
 class InsightContradiction(BaseModel):
-    """Records an event where new data opposes an insight."""
+    """Records an event where new data opposes an insight or assumption."""
     insight_id: str
     source_id: str  # e.g., Comment ID or Loop ID
     rationale: str
     confidence_delta: float
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+    link_strength: Optional[LinkStrength] = None # V1 Semantic Link Strength
+    semantic_score: Optional[float] = None # V1 Similarity score
 
 class StrategyChange(BaseModel):
     """A first-class record of a strategic pivot or adjustment."""
@@ -129,6 +137,7 @@ class Comment(BaseModel):
     emotional_intensity: EmotionalIntensity = EmotionalIntensity.LOW
     sentiment_score: Optional[float] = None
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+    embedding: Optional[List[float]] = None # V1 Semantic Vector
 
 class Performance(BaseModel):
     """Raw metrics and initial interpretation."""

@@ -1,145 +1,135 @@
 import asyncio
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
+from typing import List
+
 from mnemosyne.core.schemas import (
     Organization, Narrative, ReasoningLoop, LoopStage, Insight, InsightContradiction,
-    Assumption, RiskLevel, StrategyChange
+    Assumption, RiskLevel, StrategyChange, Comment, IntentType, EmotionalIntensity, AuthorType,
+    LinkStrength
 )
 from mnemosyne.core.interfaces import LoopOrchestrator
-from mnemosyne.loop.agents import (
-    PlanAgent, GenerateAgent, PublishAgent, 
-    ObserveAgent, InterpretAgent, AdaptAgent
-)
 from mnemosyne.memory.manager import MemoryManager
+from mnemosyne.analytics.temporal import TemporalAnalyzer
 
-async def run_mnemosyne_v0_final_demo():
-    print("--- MNEMOSYNE V0: EXPLICIT ASSUMPTIONS DEMO ---")
-    
-    # 1. Setup Memory with a prior Insight and Assumption
-    memory = MemoryManager(storage_dir="storage_v0_final")
-    
-    org = Organization(
-        id="simbli_intl",
-        name="Simbli",
-        mission="Organize the world's strategic intelligence.",
-        core_values=["Transparency", "Memory", "Precision"],
-        target_audience=["AI Engineers", "Strategists"],
-        strategic_priorities=["Launch Mnemosyne V0"]
+# Helper to manufacture past contradictions
+def create_past_contradiction(assumption_id: str, days_ago: int, delta: float, rationale: str) -> InsightContradiction:
+    timestamp = datetime.utcnow() - timedelta(days=days_ago)
+    return InsightContradiction(
+        insight_id=assumption_id,
+        source_id=f"sim_source_{days_ago}",
+        rationale=rationale,
+        confidence_delta=delta,
+        timestamp=timestamp,
+        link_strength=LinkStrength.STRONG,
+        semantic_score=0.85
     )
-    memory.add_organization(org)
-    
-    narrative = Narrative(
-        id="narrative_demo",
-        org_id=org.id,
-        title="Scaling Employee Voice",
-        objectives=["Establish trust through internal transparency"],
-        key_messages=["Our engineers are the source of truth"]
-    )
-    memory.add_narrative(narrative)
-    
-    # Prior Insight
-    prior_insight = Insight(
-        id="ins_001",
-        content="Employee-led content increases genuine questions and high-signal engagement.",
-        confidence=0.9,
-        source_loop_ids=["loop_past_001"]
-    )
-    memory.add_insight(prior_insight)
-    
-    # NEW: Active Assumption
-    assumption = Assumption(
-        id="asm_001",
-        statement="A technical audience trusts individual engineers more than brand channels.",
-        supporting_insights=[prior_insight.id],
-        current_confidence=0.95,
-        risk_level=RiskLevel.LOW,
-        invalidation_signals=["Skepticism about 'staged' employee content", "Fatigue with personal brand posts"]
-    )
-    memory.add_assumption(assumption)
-    
-    print("\n[INITIAL STATE]")
-    print(f"Assumption: {assumption.statement}")
-    print(f"Confidence: {assumption.current_confidence}")
-    print(f"Risk Level: {assumption.risk_level}")
-    
-    # 2. Initialize Orchestrator and Agents
-    orchestrator = LoopOrchestrator()
-    orchestrator.register_agent(LoopStage.PLAN, PlanAgent())
-    orchestrator.register_agent(LoopStage.GENERATE, GenerateAgent())
-    orchestrator.register_agent(LoopStage.PUBLISH, PublishAgent())
-    orchestrator.register_agent(LoopStage.OBSERVE, ObserveAgent())
-    orchestrator.register_agent(LoopStage.INTERPRET, InterpretAgent())
-    orchestrator.register_agent(LoopStage.ADAPT, AdaptAgent())
-    
-    # 3. Memory Binding Check (Failure first)
-    print("\n[STAGING] Testing Mandatory Assumption Binding...")
-    loop_fail = ReasoningLoop(id=str(uuid.uuid4()), org_id=org.id)
-    try:
-        # Context MISSING assumptions
-        await orchestrator.run_next(loop_fail, {"organization": org, "narrative": narrative})
-    except ValueError as e:
-        print(f"  Caught Expected Error: {e}")
 
-    # 4. Start the Full Loop
-    loop = ReasoningLoop(id=str(uuid.uuid4()), org_id=org.id)
-    context = {
-        "organization": org,
-        "narrative": narrative,
-        "insights": memory.get_insights(),
-        "assumptions": memory.get_assumptions() # Pass assumptions
-    }
+async def run_mnemosyne_v2_demo():
+    print("--- MNEMOSYNE V2: TEMPORAL INTELLIGENCE DEMO ---")
     
-    print(f"\nStarting Valid Loop: {loop.id}")
+    # 1. Setup Memory with Scenarios
+    memory = MemoryManager(storage_dir="storage_v2_demo")
     
-    for _ in range(6):
-        print(f"\n--- Stage: {loop.current_stage} ---")
-        loop = await orchestrator.run_next(loop, context)
-        step = loop.steps[-1]
+    # Assumption A: "Old Scar"
+    # Was 1.0. Hit by -0.2 (20 days ago), -0.2 (19 days ago). Stable since.
+    # Current Conf: 0.60. Risk: MEDIUM.
+    asm_old = Assumption(
+        id="asm_old_scar",
+        statement="Users prefer dark mode by default.",
+        supporting_insights=[],
+        current_confidence=0.60,
+        risk_level=RiskLevel.MEDIUM,
+        created_at=datetime.utcnow() - timedelta(days=30),
+        last_validated_at=datetime.utcnow() - timedelta(days=19) # Last interaction long ago
+    )
+    memory.add_assumption(asm_old)
+    
+    # Assumption B: "Fresh Wound"
+    # Was 1.0. Hit by -0.1 (3 days ago), -0.1 (2 days ago), -0.2 (1 hour ago).
+    # Current Conf: 0.60. Risk: MEDIUM.
+    asm_fresh = Assumption(
+        id="asm_fresh_wound",
+        statement="Users ignore the sidebar navigation.",
+        supporting_insights=[],
+        current_confidence=0.60,
+        risk_level=RiskLevel.MEDIUM,
+        created_at=datetime.utcnow() - timedelta(days=10),
+        last_validated_at=datetime.utcnow() 
+    )
+    memory.add_assumption(asm_fresh)
+    
+    print("\n[SCENARIO STATE]")
+    print(f"Assumption OLD:   Conf {asm_old.current_confidence}. (Target: Low Volatility, Stable)")
+    print(f"Assumption FRESH: Conf {asm_fresh.current_confidence}. (Target: High Volatility, Degrading)")
+    
+    # 2. Synthesize History Logs
+    # Note: MemoryManager.contradictions is where history lives. We preload it.
+    history: List[InsightContradiction] = []
+    
+    # History for Old Scar
+    history.append(create_past_contradiction("asm_old_scar", 20, 0.2, "Massive user revolt against light mode 20 days ago."))
+    history.append(create_past_contradiction("asm_old_scar", 19, 0.2, "Continued fallout from light mode."))
+    
+    # History for Fresh Wound
+    history.append(create_past_contradiction("asm_fresh_wound", 3, 0.1, "Sidebar clicks down."))
+    history.append(create_past_contradiction("asm_fresh_wound", 2, 0.1, "Heatmap shows no sidebar activity."))
+    history.append(create_past_contradiction("asm_fresh_wound", 0, 0.2, "User interview confirmed sidebar blindness today."))
+    
+    # Pre-load into memory (simulating persistence)
+    for h in history:
+        memory.contradictions.append(h)
         
-        if step.decisions:
-             print(f"  Decisions: {step.decisions}")
-        
-        # At ADAPT stage, record Strategy Changes and Update Memory
-        if step.stage == LoopStage.ADAPT:
-            contradictions = context.get("contradictions", [])
-            for c in contradictions:
-                # print(f"  [MEMORY UPDATE] Recording Contradiction for {c.insight_id}")
-                memory.record_contradiction(c)
-            
-            strategy_change = context.get("strategy_change")
-            if strategy_change:
-                print(f"\n  [STRATEGY CHANGE EMITTED] ID: {strategy_change.id}")
-                print(f"  DECISION: {strategy_change.decision}")
-                print(f"  JUSTIFICATION: {strategy_change.justification}")
-                memory.add_strategy_change(strategy_change)
-                
-            # Apply decay/risk updates to assumptions
-            memory.apply_decay()
-                
-    # 5. Show Final State of Assumptions
-    updated_assumption = memory.assumptions[assumption.id]
-    print(f"\n--- FINAL ASSUMPTION STATE ---")
-    print(f"Assumption: {updated_assumption.statement}")
-    print(f"Confidence: {updated_assumption.current_confidence:.2f}")
-    print(f"Risk Level: {updated_assumption.risk_level}")
+    # 3. Analytics: Run Temporal Inference
+    print("\n[RUNNING TEMPORAL ANALYSIS]")
+    analyzer = TemporalAnalyzer()
     
-    if updated_assumption.risk_level != RiskLevel.LOW:
-        print("RESULT: Risk Level escalated due to contradictory signals. System is behaving correctly.")
-    else:
-        print("RESULT: Risk Level did not escalate. Logic check required.")
-        
-    # 6. Simulate Next Plan with High Risk Assumption constraint
-    print("\n[STAGING] Testing Planning with High Risk Assumption...")
-    # Force high risk for test
-    updated_assumption.risk_level = RiskLevel.HIGH 
-    loop_next = ReasoningLoop(id=str(uuid.uuid4()), org_id=org.id)
-    # The run_next returns the UPDATED LOOP, so we need to inspect the last step of the updated loop
-    loop_next = await orchestrator.run_next(loop_next, context)
-    step_next = loop_next.steps[-1]
+    # Analyze Old Scar
+    old_analysis = analyzer.analyze_assumption_trajectory(
+        current_confidence=asm_old.current_confidence,
+        created_at=asm_old.created_at,
+        contradictions=[c for c in memory.contradictions if c.insight_id == "asm_old_scar"],
+        lookback_days=30 # Increased to capture 20-day old events
+    )
     
-    print(f"  Start of Next Loop (Plan Decisions): {step_next.decisions}")
-    if any("WARNING" in d for d in step_next.decisions):
-         print("RESULT: System correctly flagged High Risk Assumption in planning.")
+    # Analyze Fresh Wound
+    fresh_analysis = analyzer.analyze_assumption_trajectory(
+        current_confidence=asm_fresh.current_confidence,
+        created_at=asm_fresh.created_at,
+        contradictions=[c for c in memory.contradictions if c.insight_id == "asm_fresh_wound"],
+        lookback_days=10
+    )
+    
+    # 4. Display Results
+    def report(name, analysis):
+        metrics = analysis["metrics"]
+        print(f"\nReport for {name}:")
+        print(f"  Confidence: {analysis['trajectory'][-1].confidence:.2f}")
+        print(f"  Volatility (StdDev): {metrics.volatility_score:.4f}")
+        print(f"  Momentum (Delta/Day): {metrics.momentum_score:.4f}")
+        print(f"  TEMPORAL STATUS: {metrics.status_label.upper()}")
+        print("  Trajectory Replay:")
+        for point in analysis['trajectory']:
+            print(f"    {point.timestamp.strftime('%Y-%m-%d')}: {point.confidence:.2f} ({point.event_description})")
+
+    report("OLD SCAR", old_analysis)
+    report("FRESH WOUND", fresh_analysis)
+    
+    # 5. Verification Logic
+    old_metrics = old_analysis["metrics"]
+    fresh_metrics = fresh_analysis["metrics"]
+    
+    success = True
+    if old_metrics.status_label != "Stable": 
+        print(f"FAILURE: Old Scar should be Stable, but was {old_metrics.status_label}")
+        success = False
+    
+    if fresh_metrics.status_label not in ["Degrading", "Volatile/Unstable"]:
+        print(f"FAILURE: Fresh Wound should be Degrading/Volatile, but was {fresh_metrics.status_label}")
+        success = False
+        
+    if success:
+        print("\nRESULT: SUCCESS. System correctly distinguished past trauma from active collapse.")
 
 if __name__ == "__main__":
-    asyncio.run(run_mnemosyne_v0_final_demo())
+    asyncio.run(run_mnemosyne_v2_demo())

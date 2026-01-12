@@ -1,0 +1,74 @@
+[
+  {
+    "insight_id": "asm_format",
+    "source_id": "cmt_safety_0",
+    "rationale": "Semantic contradiction detected (Score: 0.32) with: 'This article was way too long. I didn't read past ...'",
+    "confidence_delta": 0.02,
+    "timestamp": "2026-01-12T07:51:02.717671",
+    "link_strength": "weak",
+    "semantic_score": 0.3186960518360138
+  },
+  {
+    "insight_id": "asm_format",
+    "source_id": "cmt_safety_1",
+    "rationale": "Semantic contradiction detected (Score: 0.46) with: 'Nobody has time for long form anymore. Just give u...'",
+    "confidence_delta": 0.08,
+    "timestamp": "2026-01-12T07:51:02.717671",
+    "link_strength": "moderate",
+    "semantic_score": 0.46401455998420715
+  },
+  {
+    "insight_id": "asm_format",
+    "source_id": "cmt_safety_0",
+    "rationale": "Semantic contradiction detected (Score: 0.32) with: 'This article was way too long. I didn't read past ...'",
+    "confidence_delta": 0.02,
+    "timestamp": "2026-01-12T07:51:55.915598",
+    "link_strength": "weak",
+    "semantic_score": 0.3186960518360138
+  },
+  {
+    "insight_id": "asm_format",
+    "source_id": "cmt_safety_1",
+    "rationale": "Semantic contradiction detected (Score: 0.46) with: 'Nobody has time for long form anymore. Just give u...'",
+    "confidence_delta": 0.08,
+    "timestamp": "2026-01-12T07:51:55.915598",
+    "link_strength": "moderate",
+    "semantic_score": 0.46401455998420715
+  },
+  {
+    "insight_id": "asm_format",
+    "source_id": "cmt_safety_0",
+    "rationale": "Semantic contradiction detected (Score: 0.90) with: 'Long-form written content is NOT the preferred for...'",
+    "confidence_delta": 0.15,
+    "timestamp": "2026-01-12T07:52:33.587531",
+    "link_strength": "strong",
+    "semantic_score": 0.9002515077590942
+  },
+  {
+    "insight_id": "asm_format",
+    "source_id": "cmt_safety_1",
+    "rationale": "Semantic contradiction detected (Score: 0.80) with: 'Analysis shows long-form written content is the wo...'",
+    "confidence_delta": 0.15,
+    "timestamp": "2026-01-12T07:52:33.587531",
+    "link_strength": "strong",
+    "semantic_score": 0.7977855801582336
+  },
+  {
+    "insight_id": "asm_format",
+    "source_id": "cmt_safety_0",
+    "rationale": "Semantic contradiction detected (Score: 0.90) with: 'Long-form written content is NOT the preferred for...'",
+    "confidence_delta": 0.15,
+    "timestamp": "2026-01-12T07:52:57.752420",
+    "link_strength": "strong",
+    "semantic_score": 0.9002515077590942
+  },
+  {
+    "insight_id": "asm_format",
+    "source_id": "cmt_safety_1",
+    "rationale": "Semantic contradiction detected (Score: 0.80) with: 'Analysis shows long-form written content is the wo...'",
+    "confidence_delta": 0.15,
+    "timestamp": "2026-01-12T07:52:57.752420",
+    "link_strength": "strong",
+    "semantic_score": 0.7977855801582336
+  }
+]

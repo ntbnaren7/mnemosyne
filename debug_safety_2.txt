@@ -1,0 +1,27 @@
+--- MNEMOSYNE V1: CONFIDENCE SAFETY RAIL DEMO ---
+
+[INITIAL BELIEFS]
+B (asm_format): Long-form written content is the preferred format for our audience.
+   Conf: 0.90
+
+[INJECTING SIGNALS]
+1. 'Long-form written content is NOT the preferred format for our audience. They hate it.'
+2. 'Analysis shows long-form written content is the worst format. Audience prefers short metrics.'
+
+Turning the crank on INTERPRET...
+  Decision: DETECTED SEMANTIC CONTRADICTION (STRONG) for asm_format (Score: 0.90)
+  Decision: DETECTED SEMANTIC CONTRADICTION (STRONG) for asm_format (Score: 0.80)
+
+Processing 2 contradictions...
+
+[SAFETY RAIL ACTIVATED]
+Assumption: asm_format
+Calculated Delta: -0.30
+Capped Delta: -0.20
+Reason: Single-cycle confidence drop exceeded allowed maximum
+
+[FINAL BELIEFS]
+B (asm_format): Long-form written content is the preferred format for our audience.
+   Conf: 0.70 (Drop: 0.20)
+
+RESULT: SUCCESS. Confidence drop limited to 0.2 despite overwhelming signal.

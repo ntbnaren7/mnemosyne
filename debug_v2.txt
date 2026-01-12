@@ -1,0 +1,27 @@
+--- MNEMOSYNE V2: TEMPORAL INTELLIGENCE DEMO ---
+
+[SCENARIO STATE]
+Assumption OLD:   Conf 0.6. (Target: Low Volatility, Stable)
+Assumption FRESH: Conf 0.6. (Target: High Volatility, Degrading)
+
+[RUNNING TEMPORAL ANALYSIS]
+
+Report for OLD SCAR:
+  Confidence: 0.60
+  Volatility (StdDev): 0.0000
+  Momentum (Delta/Day): 0.0000
+  TEMPORAL STATUS: STABLE (NEW)
+  Trajectory Replay:
+    2026-01-12: 0.60 (Current State)
+
+Report for FRESH WOUND:
+  Confidence: 0.80
+  Volatility (StdDev): 0.2517
+  Momentum (Delta/Day): -0.1333
+  TEMPORAL STATUS: VOLATILE/UNSTABLE
+  Trajectory Replay:
+    2026-01-09: 1.00 (Before Contradiction: Sidebar clicks down....)
+    2026-01-10: 0.90 (Before Contradiction: Heatmap shows no sidebar activ...)
+    2026-01-12: 0.60 (Current State)
+    2026-01-12: 0.80 (Before Contradiction: User interview confirmed sideb...)
+FAILURE: Old Scar should be Stable, but was Stable (New)

@@ -1,0 +1,21 @@
+--- MNEMOSYNE V1: CONFIDENCE SAFETY RAIL DEMO ---
+
+[INITIAL BELIEFS]
+B (asm_format): Long-form written content is the preferred format for our audience.
+   Conf: 0.90
+
+[INJECTING SIGNALS]
+1. 'This article was way too long. I didn't read past the first paragraph.'
+2. 'Nobody has time for long form anymore. Just give us the code snippets.'
+
+Turning the crank on INTERPRET...
+  Decision: DETECTED SEMANTIC CONTRADICTION (WEAK) for asm_format (Score: 0.32)
+  Decision: DETECTED SEMANTIC CONTRADICTION (MODERATE) for asm_format (Score: 0.46)
+
+Processing 2 contradictions...
+
+[FINAL BELIEFS]
+B (asm_format): Long-form written content is the preferred format for our audience.
+   Conf: 0.80 (Drop: 0.10)
+
+RESULT: INCONCLUSIVE. Drop was 0.10, which is less than the cap. Signals weren't strong enough?

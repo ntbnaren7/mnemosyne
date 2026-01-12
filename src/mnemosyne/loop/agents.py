@@ -2,9 +2,11 @@ from datetime import datetime
 from typing import Dict, Any, List
 from ..core.schemas import (
     ReasoningLoop, ReasoningStep, LoopStage, Post, Creative, 
-    Insight, InsightContradiction, IntentType, AuthorType, StrategyChange, RiskLevel
+    Insight, InsightContradiction, IntentType, AuthorType, StrategyChange, RiskLevel,
+    LinkStrength
 )
 from ..core.interfaces import ReasoningAgent
+from ..core.semantic import SemanticEngine
 
 class BaseMockAgent:
     """Helper for mock agents to create steps with rationale."""
@@ -134,49 +136,78 @@ class ObserveAgent(BaseMockAgent, ReasoningAgent):
         )
 
 class InterpretAgent(BaseMockAgent, ReasoningAgent):
+    def __init__(self):
+        self.semantic = SemanticEngine()
+
     async def process(self, loop: ReasoningLoop, context: Dict[str, Any]) -> ReasoningStep:
         intent = "Analyze signals and evaluate hypothesis."
         comments = context.get("comments", [])
-        insights = context.get("insights", [])
+        assumptions = context.get("assumptions", [])
         
-        # Heuristic Contradiction Detection
+        # Heuristic Contradiction Detection -> Semantic V1
         critiques = [c for c in comments if c.intent == IntentType.CRITIQUE]
-        skepticism_count = len(critiques)
         
         decisions = []
         contradictions = []
         
-        # Scenario-specific contradiction check for Demo
-        # Insight: "Employee-led content increases genuine questions"
-        for insight in insights:
-            if "Employee-led" in insight.content and skepticism_count > 1:
-                confidence_from = insight.confidence
-                delta = 0.3
-                confidence_to = max(0.0, confidence_from - delta)
+        # V1 Semantic Logic: Check for semantic clashes with Assumptions
+        for assumption in assumptions:
+            # Generate embedding for assumption if missing (lazy load for demo)
+            if not assumption.embedding:
+                assumption.embedding = self.semantic.encode(assumption.statement)
+            
+            for critique in critiques:
+                if not critique.embedding or not assumption.embedding:
+                    continue
+
+                # Compute Similarity
+                score = self.semantic.similarity(assumption.embedding, critique.embedding)
                 
-                contradiction = InsightContradiction(
-                    insight_id=insight.id,
-                    source_id=loop.id,
-                    rationale=f"Observed {skepticism_count} critiques/skepticism signals, contradicting expected question-led engagement.",
-                    confidence_delta=delta
-                )
-                contradictions.append(contradiction)
-                decisions.append(f"DETECTED CONTRADICTION for Insight {insight.id} ({confidence_from:.2f} -> {confidence_to:.2f})")
+                # Determine Link Strength based on semantic score
+                link_strength = None
+                if score > 0.6:
+                    link_strength = LinkStrength.STRONG
+                elif score > 0.4:
+                    link_strength = LinkStrength.MODERATE
+                elif score > 0.25:
+                    link_strength = LinkStrength.WEAK
                 
-                # Pass data for Adapt
-                context["pivot_data"] = {
-                    "insight_id": insight.id,
-                    "previous_assumption": insight.content,
-                    "confidence_from": confidence_from,
-                    "confidence_to": confidence_to,
-                    "triggering_signals": [c.content for c in critiques]
-                }
+                if link_strength:
+                    # Calculate weighted delta
+                    delta_map = {
+                        LinkStrength.STRONG: 0.15,
+                        LinkStrength.MODERATE: 0.08,
+                        LinkStrength.WEAK: 0.02
+                    }
+                    confidence_delta = delta_map[link_strength]
+
+                    contradiction = InsightContradiction(
+                        insight_id=assumption.id, # We allow assumptions here as per schema update logic
+                        source_id=critique.id,
+                        rationale=f"Semantic contradiction detected (Score: {score:.2f}) with: '{critique.content[:50]}...'",
+                        confidence_delta=confidence_delta,
+                        link_strength=link_strength,
+                        semantic_score=score
+                    )
+                    contradictions.append(contradiction)
+                    decisions.append(f"DETECTED SEMANTIC CONTRADICTION ({link_strength.value.upper()}) for {assumption.id} (Score: {score:.2f})")
+                    
+                    # Store pivot data for first Strong hit (for StrategyChange demo flow)
+                    if link_strength == LinkStrength.STRONG and "pivot_data" not in context:
+                        context["pivot_data"] = {
+                            "insight_id": assumption.id, # Using assumption ID as the key for now
+                            "previous_assumption": assumption.statement,
+                            "confidence_from": assumption.current_confidence,
+                            "confidence_to": max(0.0, assumption.current_confidence - confidence_delta),
+                            "triggering_signals": [critique.content]
+                        }
+
         
         if not contradictions:
             decisions.append("No active contradictions detected in high-signal comments.")
         
         context["contradictions"] = contradictions
-        rationale = f"Analyzed {len(comments)} comments. Found {skepticism_count} critique(s)."
+        rationale = f"Analyzed {len(comments)} comments. Found {len(critiques)} critique(s) with {len(contradictions)} semantic links."
         
         return self.create_step(
             stage=LoopStage.INTERPRET, 

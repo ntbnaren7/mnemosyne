@@ -6,6 +6,8 @@ from ..core.schemas import (
     Organization, Narrative, ReasoningLoop, Insight, InsightContradiction, StrategyChange, Assumption, RiskLevel
 )
 
+MAX_CONFIDENCE_DROP_PER_CYCLE = 0.20
+
 class MemoryManager:
     """
     V0 Memory Manager with simple JSON persistence and Strategic Rationale support.
@@ -80,14 +82,66 @@ class MemoryManager:
         self.insights[insight.id] = insight
         self._save()
 
-    def record_contradiction(self, contradiction: InsightContradiction):
-        self.contradictions.append(contradiction)
-        if contradiction.insight_id in self.insights:
-            insight = self.insights[contradiction.insight_id]
-            # Capture the before state for StrategyChange emission elsewhere if needed
-            insight.confidence = max(0.0, insight.confidence - contradiction.confidence_delta)
-            insight.last_updated = datetime.utcnow()
+    def process_contradictions(self, contradictions: List[InsightContradiction]):
+        """
+        V1 Safety Rail: Processes a batch of contradictions with specific safety caps.
+        Aggregates confidence drops per assumption and enforces MAX_CONFIDENCE_DROP_PER_CYCLE.
+        """
+        # 1. Archive raw contradictions (History Preservation)
+        self.contradictions.extend(contradictions)
+        
+        # 2. Aggregate Deltas by ID
+        active_deltas: Dict[str, float] = {}
+        affected_assumptions: Dict[str, List[InsightContradiction]] = {}
+        
+        for c in contradictions:
+            if c.insight_id not in active_deltas:
+                active_deltas[c.insight_id] = 0.0
+                affected_assumptions[c.insight_id] = []
+            active_deltas[c.insight_id] += c.confidence_delta
+            affected_assumptions[c.insight_id].append(c)
+            
+        # 3. Apply Updates with Safety Rail
+        timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M")
+        
+        for a_id, total_delta in active_deltas.items():
+            if a_id in self.assumptions:
+                assumption = self.assumptions[a_id]
+                
+                # Apply Safety Cap
+                final_delta = total_delta
+                if final_delta > MAX_CONFIDENCE_DROP_PER_CYCLE:
+                    print(f"\n[SAFETY RAIL ACTIVATED]")
+                    print(f"Assumption: {a_id}")
+                    print(f"Calculated Delta: -{total_delta:.2f}")
+                    print(f"Capped Delta: -{MAX_CONFIDENCE_DROP_PER_CYCLE:.2f}")
+                    print(f"Reason: Single-cycle confidence drop exceeded allowed maximum")
+                    final_delta = MAX_CONFIDENCE_DROP_PER_CYCLE
+                
+                # Apply update
+                assumption.current_confidence = max(0.0, assumption.current_confidence - final_delta)
+                assumption.last_validated_at = datetime.utcnow()
+                
+                # Record Invalidating Signals (logging the cap in the signal history too)
+                for c in affected_assumptions[a_id]:
+                    rating = f"({c.link_strength.value})" if c.link_strength else ""
+                    signal_text = f"[{timestamp}] Contradiction {rating}: {c.rationale}"
+                    assumption.invalidation_signals.append(signal_text)
+
+                if final_delta != total_delta:
+                    assumption.invalidation_signals.append(f"[{timestamp}] SAFETY RAIL: Confidence drop capped at {MAX_CONFIDENCE_DROP_PER_CYCLE} (Calculated: {total_delta}).")
+                    
+            elif a_id in self.insights:
+                # Legacy support for Insights (no explicit cap mandated, but good practice to keep distinct)
+                insight = self.insights[a_id]
+                insight.confidence = max(0.0, insight.confidence - total_delta)
+                insight.last_updated = datetime.utcnow()
+        
         self._save()
+
+    def record_contradiction(self, contradiction: InsightContradiction):
+        # Legacy Wrapper: Forward to batch processor
+        self.process_contradictions([contradiction])
 
     def add_strategy_change(self, change: StrategyChange):
         self.strategy_changes.append(change)

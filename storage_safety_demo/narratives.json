@@ -1,0 +1,15 @@
+{
+  "narrative_v1": {
+    "id": "narrative_v1",
+    "org_id": "simbli_intl",
+    "title": "Safety First",
+    "objectives": [
+      "Ensure stable beliefs"
+    ],
+    "key_messages": [
+      "Beliefs should change gradually"
+    ],
+    "active": true,
+    "created_at": "2026-01-12T07:52:53.820749"
+  }
+}
