@@ -25,6 +25,10 @@ To verify the Belief Adaptation:
 ```bash
 uv run run_stress_test.py
 ```
+To run the Web Orchestrator Interface:
+```bash
+uv run streamlit run app.py
+```
 ### Content Execution Sandbox
 - **Isolated Execution Layer**: A dedicated module (`sandbox/`) handles creative asset generation without contaminating the core reasoning logic.
 - **Contract-Based Handoff**: Mnemosyne emits a `ContentBrief` (Visual/Narrative Intent + Assumptions referenced) which the sandbox translates into assets.
@@ -45,6 +49,16 @@ uv run run_stress_test.py
     3. **Semantic Engine** detects contradictions.
     4. **Memory Manager** updates confidence (respecting safety rails).
 - **Result**: The system automatically downgrades the failing belief and pivots future execution strategy.
+
+### Web Orchestration Interface
+- **Type**: Streamlit Web Application (`app.py`).
+- **Function**: End-to-end product test harness.
+- **Workflow**:
+    1. User inputs a topic/prompt.
+    2. **Semantic Engine** identifies the relevant Assumption.
+    3. System generates a `ContentBrief` with belief-derived Risk Notes.
+    4. **Sandbox** executes the brief via Gemini Image Generation (Auto-Model).
+    5. UI displays 4+ variations with traceability metadata.
 
 ---
 
