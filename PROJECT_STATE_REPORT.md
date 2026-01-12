@@ -12,11 +12,39 @@ This update summarizes the current state of Mnemosyne and the latest architectur
 - **Authority Levels**: Introduced `Executive`, `Strategist`, and `Observer` roles.
 - **Dissent Tracking**: The system calculates "Override Debt"—logging where and why a human diverged from the system's recommended belief or path.
 
+### A/B Experiment
+To run the main Mnemosyne system:
+```bash
+uv run main.py
+```
+To verify the A/B Belief Toggle:
+```bash
+uv run run_ab_experiment.py
+```
+To verify the Belief Adaptation:
+```bash
+uv run run_stress_test.py
+```
 ### Content Execution Sandbox
 - **Isolated Execution Layer**: A dedicated module (`sandbox/`) handles creative asset generation without contaminating the core reasoning logic.
 - **Contract-Based Handoff**: Mnemosyne emits a `ContentBrief` (Visual/Narrative Intent + Assumptions referenced) which the sandbox translates into assets.
 - **Gemini Integration**: Functional image generation via Gemini API with autonomous model selection (Auto-Model discovery).
 - **Traceability**: All generated assets are programmatically linked back to the specific `Assumption ID` that governed their creation.
+
+### A/B Belief Toggle Experiment
+- **Primitive**: `BeliefToggleExperiment` (Sandbox-only).
+- **Function**: Proves causal link between beliefs and outputs.
+- **Method**: Runs two identical `ContentBriefs` with opposing `Risk Notes` derived from conflicting assumptions.
+- **Outcome**: Generates materially different imagery (e.g., "Chaos" vs "Zen") while holding all other variables constant.
+
+### Belief Stress Test (Adaptation)
+- **Function**: Demonstrates institutional learning under pressure.
+- **Process**:
+    1. Seeds competing beliefs.
+    2. Injects semantic feedback challenging one belief.
+    3. **Semantic Engine** detects contradictions.
+    4. **Memory Manager** updates confidence (respecting safety rails).
+- **Result**: The system automatically downgrades the failing belief and pivots future execution strategy.
 
 ---
 
