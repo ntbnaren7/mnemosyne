@@ -125,6 +125,19 @@ class Narrative(BaseModel):
     active: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
+class ContentBrief(BaseModel):
+    """
+    ReadOnly Contract: Mnemosyne telling the execution layer WHAT to create.
+    """
+    id: str
+    target_id: str # e.g. Post ID or Plan ID
+    narrative_intent: str # "Show technological dominance"
+    visual_intent: str # "Sleek, dark mode, glowing blue nodes"
+    assumptions_referenced: List[str] # ["asm_trust"]
+    risk_notes: str # "Avoid being too cold."
+    experiment_tag: str
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
 class Creative(BaseModel):
     """Metadata for visual or creative assets."""
     id: str

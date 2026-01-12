@@ -17,6 +17,36 @@
     "rationale": "External funding secured. Risk appetite increased significantly. Ignoring V1 safety for this specific launch.",
     "authority_level": "executive",
     "timestamp": "2026-01-12T08:08:30.197974",
+    "active": false
+  },
+  {
+    "id": "ovr_79289f0c",
+    "target_id": "plan_launch_q1",
+    "previous_state": "Execute Plan A: Conservative Growth (Low Risk)",
+    "override_action": "Execute Plan B: Aggressive Market Entry (High Risk)",
+    "rationale": "External funding secured. Risk appetite increased significantly. Ignoring V1 safety for this specific launch.",
+    "authority_level": "executive",
+    "timestamp": "2026-01-12T08:14:47.107153",
+    "active": false
+  },
+  {
+    "id": "ovr_601b491b",
+    "target_id": "plan_launch_q1",
+    "previous_state": "Execute Plan A: Conservative Growth (Low Risk)",
+    "override_action": "Execute Plan B: Aggressive Market Entry (High Risk)",
+    "rationale": "External funding secured. Risk appetite increased significantly. Ignoring V1 safety for this specific launch.",
+    "authority_level": "executive",
+    "timestamp": "2026-01-12T08:15:12.080410",
+    "active": false
+  },
+  {
+    "id": "ovr_059a0034",
+    "target_id": "plan_launch_q1",
+    "previous_state": "Execute Plan A: Conservative Growth (Low Risk)",
+    "override_action": "Execute Plan B: Aggressive Market Entry (High Risk)",
+    "rationale": "External funding secured. Risk appetite increased significantly. Ignoring V1 safety for this specific launch.",
+    "authority_level": "executive",
+    "timestamp": "2026-01-12T08:15:36.978120",
     "active": true
   }
 ]

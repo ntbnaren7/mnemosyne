@@ -1,0 +1,37 @@
+--- MNEMOSYNE BELIEF STRESS TEST ---
+
+[INIT] Initializing V0 Memory & V1 Semantic Engine...
+
+[SEEDING] Creating Competing Beliefs...
+  > Seeding: asm_chaos_trust (Conf: 1.0)
+  > Seeding: asm_order_trust (Conf: 1.0)
+
+[ROUND 1: BASELINE]
+  asm_chaos_trust: Confidence 1.0
+  asm_order_trust: Confidence 1.0
+
+[FEEDBACK INJECTION]
+  > Signal: 'This visual feels too messy and hard to parse.'
+    -> (No Link to asm_chaos_trust)
+  > Signal: 'It is overwhelming and confusing to look at.'
+    -> Targets asm_chaos_trust (Sim: 0.27 | WEAK)
+  > Signal: 'I don't trust this, it looks like broken code.'
+    -> (No Link to asm_chaos_trust)
+  > Signal: 'Too much complexity, I want to see the high level.'
+    -> Targets asm_chaos_trust (Sim: 0.38 | WEAK)
+  > Signal: 'Cluttered and chaotic, not professional.'
+    -> Targets asm_chaos_trust (Sim: 0.33 | WEAK)
+
+[ADAPTATION PHASE]
+  Processing 3 contradictions...
+
+[ROUND 2: RESULT]
+  asm_chaos_trust: Confidence 0.94 (Delta: -0.06)
+  asm_order_trust: Confidence 1.00 (Delta: 0.00)
+
+[EXPLANATION]
+Optimization observed: The belief in 'visible complexity' failed to resonate with users.
+Mnemosyne has reduced confidence in asm_chaos_trust while retaining asm_order_trust.
+Future content will skew towards Order.
+
+RESULT: SUCCESS. Mnemosyne adapted its beliefs based on semantic feedback.

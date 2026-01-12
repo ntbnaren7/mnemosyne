@@ -3,6 +3,10 @@ import os
 import uuid
 import shutil
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load API key from .env file
+load_dotenv()
 
 # Ensure 'src' is in python path
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))

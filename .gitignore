@@ -8,3 +8,11 @@ wheels/
 
 # Virtual environments
 .venv
+
+.env
+
+# Documentation (Local Only)
+PROJECT_STATE_REPORT.md
+V2_FREEZE_DECLARATION.md
+task.md
+walkthrough.md

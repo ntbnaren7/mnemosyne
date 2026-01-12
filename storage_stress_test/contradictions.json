@@ -1,0 +1,29 @@
+[
+  {
+    "insight_id": "asm_chaos_trust",
+    "source_id": "simulated_feedback",
+    "rationale": "User feedback 'It is overwhelming and confusing to look at.' contradicts belief in visible complexity.",
+    "confidence_delta": 0.02,
+    "timestamp": "2026-01-12T08:41:13.889367",
+    "link_strength": "weak",
+    "semantic_score": 0.2688630223274231
+  },
+  {
+    "insight_id": "asm_chaos_trust",
+    "source_id": "simulated_feedback",
+    "rationale": "User feedback 'Too much complexity, I want to see the high level.' contradicts belief in visible complexity.",
+    "confidence_delta": 0.02,
+    "timestamp": "2026-01-12T08:41:13.895042",
+    "link_strength": "weak",
+    "semantic_score": 0.38066092133522034
+  },
+  {
+    "insight_id": "asm_chaos_trust",
+    "source_id": "simulated_feedback",
+    "rationale": "User feedback 'Cluttered and chaotic, not professional.' contradicts belief in visible complexity.",
+    "confidence_delta": 0.02,
+    "timestamp": "2026-01-12T08:41:13.900087",
+    "link_strength": "weak",
+    "semantic_score": 0.32878419756889343
+  }
+]
