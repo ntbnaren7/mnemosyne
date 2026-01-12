@@ -1,60 +1,34 @@
-# Mnemosyne: Sprint Progress Report (V3 + Sandbox)
-*Status: Current Implementation Complete*
+# Mnemosyne: Update for AI Model Sync
+*Status: V3 Governance & Content Execution Sandbox Complete*
 
-This report focuses on the latest architectural additions and the resulting system state. It omits historical development logs (V0-V2) to focus on the active execution surface.
-
----
-
-## 1. Integrated System State
-Mnemosyne is now an **End-to-End Epistemic Sandbox**. It can bridge the transition from a strategic hypothesis to a governed creative asset.
-
-**The Current Core Capability:**
-- **Governance**: Distinguishes between what the AI "thinks" (Beliefs) and what it is "ordered to do" (Overrides).
-- **Execution**: Generates visual assets (images) that are traceable to specific governing assumptions.
+This update summarizes the current state of Mnemosyne and the latest architectural additions.
 
 ---
 
-## 2. Present Implementations
+## 1. Latest Implementations
 
 ### Governance & Authority (V3)
-The system now handles human intervention without corrupting belief history.
-- **Authority Model**: Explicit `EXECUTIVE` and `STRATEGIST` roles for overriding plans.
-- **Override Debt**: Tracking active deviations where human mandate differs from system confidence.
-- **Logic**: Mnemosyne acknowledges the override but preserves its original internal reasoning for audit.
+- **Explicit Override System**: Humans can now explicitly mandate actions (e.g., "Force Plan B") that contradict the AI's internal reasoning.
+- **Authority Levels**: Introduced `Executive`, `Strategist`, and `Observer` roles.
+- **Dissent Tracking**: The system calculates "Override Debt"—logging where and why a human diverged from the system's recommended belief or path.
 
 ### Content Execution Sandbox
-A physically separate layer (`sandbox/`) for asset generation.
-- **Contract**: Use of `ContentBrief` schema as the sole interface between logic and execution.
-- **Asset Generation**: Integrated with Gemini API for image creation.
-- **Constraints Met**:
-    - **Model Autonomy**: Uses dynamic discovery (`list_models`) to avoid hardcoded versioning.
-    - **Isolation**: Mnemosyne Core does not know Gemini exists.
-    - **Traceability**: All outputs are tagged with `assumptions_referenced`.
+- **Isolated Execution Layer**: A dedicated module (`sandbox/`) handles creative asset generation without contaminating the core reasoning logic.
+- **Contract-Based Handoff**: Mnemosyne emits a `ContentBrief` (Visual/Narrative Intent + Assumptions referenced) which the sandbox translates into assets.
+- **Gemini Integration**: Functional image generation via Gemini API with autonomous model selection (Auto-Model discovery).
+- **Traceability**: All generated assets are programmatically linked back to the specific `Assumption ID` that governed their creation.
 
 ---
 
-## 3. Technical Changes (Latest)
-- **Schemas**: Added `Override` (V3) and `ContentBrief` (Sandbox) to `schemas.py`.
-- **Infrastructure**:
-    - `sandbox/gemini_client.py`: High-level wrapper for Imagen/Gemini models.
-    - `sandbox/executor.py`: Translates high-level briefs into 5 distinct localized prompts.
-- **Demo Verification**: `run_sandbox_demo.py` confirms that a belief about "Technical Trust" can successfully dictate the visual composition of a LinkedIn post.
+## 2. Updated System Capabilities
+Mnemosyne is now a fully capable **Epistemic Pipeline**:
+1. **Governed Decisioning**: It can offer a recommendation, receive an executive override, execute the mandate, and log the disagreement for future audit.
+2. **Belief-Governed Content**: It can translate abstract institutional beliefs (e.g., "Our audience values technical precision") into specific visual mandates and real generated images.
+3. **Traceable Creative**: Every asset in the sandbox is now "explainable" by the underlying Mnemosyne belief system.
 
 ---
 
-## 4. Current Constraints & Invariants
-- **Frozen Logic**: Belief formation, semantic interpretation, and temporal analysis are locked.
-- **Dependency Rule**: Mnemosyne logic remains zero-dependency (Execution layers are separate).
-- **Authority Boundary**: Humans quyết định; Mnemosyne giải thích.
-
----
-
-## 5. Execution Reference
-To verify the current present state:
-```bash
-uv run run_sandbox_demo.py
-```
-To verify the Governance/Debt logic:
-```bash
-uv run main.py
-```
+## 3. Active Constraints
+- **Architectural Isolation**: Logic (src) vs. Execution (sandbox) separation is strictly enforced.
+- **Dependency Guard**: Mnemosyne Core remains zero-dependency (No Gemini/Model logic in core).
+- **Frozen History**: Overrides sit alongside history—they never overwrite or delete the AI's original reasoning.
