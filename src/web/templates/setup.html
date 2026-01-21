@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Setup - Mnemosyne{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <div class="card">
+        <h1>Company Context</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+            Provide your company details to generate a governed monthly content plan.
+        </p>
+
+        <form id="setupForm" action="/api/generate" method="POST">
+            <div class="form-group">
+                <label for="name">Company Name</label>
+                <input type="text" id="name" name="name" placeholder="e.g. Acme Corp" required>
+            </div>
+
+            <div class="form-group">
+                <label for="industry">Industry</label>
+                <input type="text" id="industry" name="industry" placeholder="e.g. SaaS, Fintech, Healthcare" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Company Description</label>
+                <textarea id="description" name="description" rows="3" placeholder="What do you do?"
+                    required></textarea>
+            </div>
+
+            <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="stage">Stage</label>
+                    <select id="stage" name="stage">
+                        <option value="startup">Startup</option>
+                        <option value="scaleup">Scaleup</option>
+                        <option value="enterprise">Enterprise</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tone">Tone</label>
+                    <select id="tone" name="tone">
+                        <option value="professional">Professional</option>
+                        <option value="witty">Witty</option>
+                        <option value="empathetic">Empathetic</option>
+                        <option value="authoritative">Authoritative</option>
+                        <option value="innovative">Innovative</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="audience">Target Audience (comma separated)</label>
+                <input type="text" id="audience" name="audience" placeholder="e.g. CTOs, Developers, SMB Owners"
+                    required>
+            </div>
+
+            <button type="submit" class="primary" id="generateBtn">Generate Monthly Plan ></button>
+        </form>
+    </div>
+
+    <div id="loader" style="display: none; text-align: center; margin-top: 2rem;">
+        <p>Mnemosyne is thinking...</p>
+        <p style="font-size: 0.8rem; color: var(--text-secondary)">Consulting beliefs, assessing risk, and planning
+            content.</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('setupForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('generateBtn');
+        const loader = document.getElementById('loader');
+
+        btn.disabled = true;
+        btn.innerText = "Generating...";
+        loader.style.display = 'block';
+
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+
+        // Parse comma-separated audience
+        data.target_audience = data.audience.split(',').map(s => s.trim());
+        data.posting_frequency_per_week = 2; // Default for prototype
+
+        try {
+            const response = await fetch('/api/plan/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                window.location.href = '/plan';
+            } else {
+                alert('Error generating plan');
+                btn.disabled = false;
+            }
+        } catch (err) {
+            console.error(err);
+            btn.disabled = false;
+        }
+    });
+</script>
+{% endblock %}

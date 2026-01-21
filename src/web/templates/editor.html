@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}Editor - Mnemosyne{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+            <h1>Creative Workspace</h1>
+            <p style="color: var(--text-secondary); margin: 0;">Human-in-the-loop refinement. Edits are logged.</p>
+        </div>
+        <div>
+            <button class="primary" style="background: var(--bg-secondary); border: 1px solid var(--surface-border);"
+                onclick="history.back()">Cancel</button>
+            <button class="primary" onclick="saveEdits()">Save Changes</button>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 1rem; height: 600px;">
+        <!-- Canvas Area -->
+        <div
+            style="flex: 2; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+            <canvas id="editorCanvas"></canvas>
+        </div>
+
+        <!-- Tools -->
+        <div style="flex: 1; min-width: 250px; background: var(--bg-secondary); padding: 1rem; border-radius: 4px;">
+            <h3>Tools</h3>
+
+            <div class="form-group">
+                <label>Select Text</label>
+                <div id="textLayers" style="max-height: 200px; overflow-y: auto;">
+                    <!-- Layers populated by JS -->
+                </div>
+            </div>
+
+            <hr style="border-color: var(--surface-border);">
+
+            <div id="textProperties" style="display:none;">
+                <div class="form-group">
+                    <label>Content</label>
+                    <input type="text" id="textContent">
+                </div>
+
+                <div class="form-group">
+                    <label>Font Size</label>
+                    <input type="number" id="textSize">
+                </div>
+
+                <div class="form-group">
+                    <label>Color</label>
+                    <input type="color" id="textColor">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/fabric@5.3.0/dist/fabric.min.js"></script>
+<script>
+    const postId = "{{ post_id }}";
+    let canvas;
+
+    async function initEditor() {
+        canvas = new fabric.Canvas('editorCanvas', {
+            width: 800,
+            height: 600,
+            backgroundColor: '#111'
+        });
+
+        // Load Image & Decompose
+        const btn = document.querySelector('button[onclick="saveEdits()"]');
+        const originalText = btn.innerText;
+        btn.innerText = "Analyzing Image Layers...";
+        btn.disabled = true;
+
+        try {
+            const response = await fetch(`/api/editor/decompose/${postId}`);
+            if (!response.ok) throw new Error("Decomposition failed");
+
+            const data = await response.json();
+
+            // 1. Set Inpainted Background
+            fabric.Image.fromURL(`/sandbox_images/${data.background_path}`, function (img) {
+                // Scale to fit
+                const scale = Math.min(800 / img.width, 600 / img.height);
+                img.scale(scale);
+                canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+
+                // 2. Add Text Layers
+                data.layers.forEach(layer => {
+                    if (layer.type === 'text') {
+                        const textObj = new fabric.Text(layer.content, {
+                            left: layer.bbox[0] * scale,
+                            top: layer.bbox[1] * scale,
+                            fill: layer.style.color,
+                            fontSize: layer.style.fontSize * scale,
+                            fontFamily: 'Inter',
+                            selectable: true
+                        });
+                        canvas.add(textObj);
+                    } else if (layer.type === 'object') {
+                        fabric.Image.fromURL(`/sandbox_images/${layer.content}`, function (oImg) {
+                            oImg.set({
+                                left: layer.bbox[0] * scale,
+                                top: layer.bbox[1] * scale,
+                                selectable: true
+                            });
+                            oImg.scaleToWidth(layer.bbox[2] * scale);
+                            canvas.add(oImg);
+                        });
+                    }
+                });
+
+                updateLayerList();
+                btn.innerText = originalText;
+                btn.disabled = false;
+            });
+
+        } catch (e) {
+            console.error("Layering failed, falling back to flat image", e);
+            // Fallback to original behavior
+            const response = await fetch('/api/plan/latest');
+            const data = await response.json();
+            const assets = data.assets;
+            const assetPath = assets[postId];
+            if (assetPath) {
+                fabric.Image.fromURL(`/sandbox_images/${assetPath}`, function (img) {
+                    const scale = Math.min(800 / img.width, 600 / img.height);
+                    img.scale(scale);
+                    canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+            } else {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        canvas.on('selection:created', (e) => showProperties(e.selected[0]));
+        canvas.on('selection:updated', (e) => showProperties(e.selected[0]));
+        canvas.on('selection:cleared', () => hideProperties());
+    }
+
+    function updateLayerList() {
+        const container = document.getElementById('textLayers');
+        container.innerHTML = '';
+
+        canvas.getObjects().forEach((obj, idx) => {
+            if (obj.type === 'text') {
+                const div = document.createElement('div');
+                div.style.padding = '0.5rem';
+                div.style.background = 'var(--bg-primary)';
+                div.style.marginBottom = '0.5rem';
+                div.style.cursor = 'pointer';
+                div.innerText = obj.text.substring(0, 20) + '...';
+                div.onclick = () => {
+                    canvas.setActiveObject(obj);
+                    canvas.renderAll();
+                };
+                container.appendChild(div);
+            }
+        });
+    }
+
+    function showProperties(obj) {
+        if (obj.type !== 'text') return;
+
+        document.getElementById('textProperties').style.display = 'block';
+
+        const content = document.getElementById('textContent');
+        const size = document.getElementById('textSize');
+        const color = document.getElementById('textColor');
+
+        content.value = obj.text;
+        size.value = obj.fontSize;
+        color.value = obj.fill;
+
+        content.oninput = () => { obj.set('text', content.value); canvas.renderAll(); updateLayerList(); };
+        size.oninput = () => { obj.set('fontSize', parseInt(size.value)); canvas.renderAll(); };
+        color.oninput = () => { obj.set('fill', color.value); canvas.renderAll(); };
+    }
+
+    function hideProperties() {
+        document.getElementById('textProperties').style.display = 'none';
+    }
+
+    async function saveEdits() {
+        const btn = document.querySelector('button[onclick="saveEdits()"]');
+        btn.disabled = true;
+        btn.innerText = "Saving...";
+
+        try {
+            const dataUrl = canvas.toDataURL({ format: 'png' });
+
+            const response = await fetch('/api/plan/edit/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    post_id: postId,
+                    image_data: dataUrl,
+                    change_description: "Manual edit via Creative Workspace"
+                })
+            });
+
+            if (response.ok) {
+                alert("Saved! Human Creative Override logged.");
+                window.location.href = `/post/${postId}`;
+            } else {
+                alert("Error saving edit.");
+                btn.disabled = false;
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Error saving edit.");
+            btn.disabled = false;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initEditor);
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{
+  "asm_trust": {
+    "id": "asm_trust",
+    "statement": "Users trust transparent communication over polished marketing.",
+    "supporting_insights": [],
+    "current_confidence": 1.0,
+    "risk_level": "low",
+    "last_validated_at": "2026-01-20T07:28:09.398322",
+    "invalidation_signals": [],
+    "created_at": "2026-01-20T07:28:09.398322",
+    "decay_rate": 0.01,
+    "embedding": null
+  },
+  "asm_visual": {
+    "id": "asm_visual",
+    "statement": "High-contrast, dark-mode visuals signal 'premium' to tech audiences.",
+    "supporting_insights": [],
+    "current_confidence": 1.0,
+    "risk_level": "medium",
+    "last_validated_at": "2026-01-20T07:28:09.398322",
+    "invalidation_signals": [],
+    "created_at": "2026-01-20T07:28:09.398322",
+    "decay_rate": 0.01,
+    "embedding": null
+  },
+  "asm_frequency": {
+    "id": "asm_frequency",
+    "statement": "Consistency matters more than viral spikes for B2B retention.",
+    "supporting_insights": [],
+    "current_confidence": 1.0,
+    "risk_level": "low",
+    "last_validated_at": "2026-01-20T07:28:09.398322",
+    "invalidation_signals": [],
+    "created_at": "2026-01-20T07:28:09.398322",
+    "decay_rate": 0.01,
+    "embedding": null
+  }
+}

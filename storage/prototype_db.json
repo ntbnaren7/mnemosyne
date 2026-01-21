@@ -1,0 +1,223 @@
+{
+  "latest": {
+    "plan": {
+      "month_name": "January",
+      "year": 2026,
+      "company_context": {
+        "name": "ECHO",
+        "industry": "Healthcare",
+        "description": "Building a game-based mobile application for hearing tests, to let users test their hearing right from their mobile and with their earphones, and get a clinical-level audiogram, all just by playing simple games of their choice",
+        "stage": "startup",
+        "tone": "innovative",
+        "posting_frequency_per_week": 2,
+        "target_audience": [
+          "Students",
+          "Gamers",
+          "Singers",
+          "Musicians",
+          "Common People"
+        ]
+      },
+      "posts": [
+        {
+          "id": "post_0c1aec9a",
+          "week_number": 1,
+          "scheduled_date": "2026-01-26T12:29:28.333236",
+          "objective": "product_education",
+          "governing_assumptions": [
+            {
+              "id": "asm_frequency",
+              "statement": "Consistency matters more than viral spikes for B2B retention.",
+              "supporting_insights": [],
+              "current_confidence": 1.0,
+              "risk_level": "low",
+              "last_validated_at": "2026-01-20T07:28:09.398322",
+              "invalidation_signals": [],
+              "created_at": "2026-01-20T07:28:09.398322",
+              "decay_rate": 0.01,
+              "embedding": null
+            },
+            {
+              "id": "asm_trust",
+              "statement": "Users trust transparent communication over polished marketing.",
+              "supporting_insights": [],
+              "current_confidence": 1.0,
+              "risk_level": "low",
+              "last_validated_at": "2026-01-20T07:28:09.398322",
+              "invalidation_signals": [],
+              "created_at": "2026-01-20T07:28:09.398322",
+              "decay_rate": 0.01,
+              "embedding": null
+            }
+          ],
+          "risk_notes": "Governed by 2 assumption(s). (LOW) Consistency matters more than viral spikes for B2B retention. (LOW) Users trust transparent communication over polished marketing.",
+          "hypothesis": "By focusing on product education aligned with our belief that 'Consistency matters more than viral spikes for B2B retention.', we will drive engagement with Students.",
+          "topic": "Customer success story visualization for ECHO (Healthcare)",
+          "key_message": "Key message about Customer success story visualization.",
+          "visual_direction": "Macro photography, detailed, sleek interface elements, high-tech glow, innovative lighting. branded matching ECHO's innovative tone.",
+          "caption_intent": "Write a innovative caption about Customer success story visualization."
+        },
+        {
+          "id": "post_74de02e9",
+          "week_number": 2,
+          "scheduled_date": "2026-02-02T12:29:28.333236",
+          "objective": "brand_awareness",
+          "governing_assumptions": [
+            {
+              "id": "asm_trust",
+              "statement": "Users trust transparent communication over polished marketing.",
+              "supporting_insights": [],
+              "current_confidence": 1.0,
+              "risk_level": "low",
+              "last_validated_at": "2026-01-20T07:28:09.398322",
+              "invalidation_signals": [],
+              "created_at": "2026-01-20T07:28:09.398322",
+              "decay_rate": 0.01,
+              "embedding": null
+            },
+            {
+              "id": "asm_frequency",
+              "statement": "Consistency matters more than viral spikes for B2B retention.",
+              "supporting_insights": [],
+              "current_confidence": 1.0,
+              "risk_level": "low",
+              "last_validated_at": "2026-01-20T07:28:09.398322",
+              "invalidation_signals": [],
+              "created_at": "2026-01-20T07:28:09.398322",
+              "decay_rate": 0.01,
+              "embedding": null
+            }
+          ],
+          "risk_notes": "Governed by 2 assumption(s). (LOW) Users trust transparent communication over polished marketing. (LOW) Consistency matters more than viral spikes for B2B retention.",
+          "hypothesis": "By focusing on brand awareness aligned with our belief that 'Users trust transparent communication over polished marketing.', we will drive engagement with Singers.",
+          "topic": "The future of Healthcare for ECHO (Healthcare)",
+          "key_message": "Key message about The future of Healthcare.",
+          "visual_direction": "Cinematic, wide-angle shot showing scale and impact of Healthcare. branded matching ECHO's innovative tone.",
+          "caption_intent": "Write a innovative caption about The future of Healthcare."
+        },
+        {
+          "id": "post_2211710d",
+          "week_number": 3,
+          "scheduled_date": "2026-02-09T12:29:28.333236",
+          "objective": "product_education",
+          "governing_assumptions": [
+            {
+              "id": "asm_frequency",
+              "statement": "Consistency matters more than viral spikes for B2B retention.",
+              "supporting_insights": [],
+              "current_confidence": 1.0,
+              "risk_level": "low",
+              "last_validated_at": "2026-01-20T07:28:09.398322",
+              "invalidation_signals": [],
+              "created_at": "2026-01-20T07:28:09.398322",
+              "decay_rate": 0.01,
+              "embedding": null
+            },
+            {
+              "id": "asm_visual",
+              "statement": "High-contrast, dark-mode visuals signal 'premium' to tech audiences.",
+              "supporting_insights": [],
+              "current_confidence": 1.0,
+              "risk_level": "medium",
+              "last_validated_at": "2026-01-20T07:28:09.398322",
+              "invalidation_signals": [],
+              "created_at": "2026-01-20T07:28:09.398322",
+              "decay_rate": 0.01,
+              "embedding": null
+            }
+          ],
+          "risk_notes": "Governed by 2 assumption(s). (LOW) Consistency matters more than viral spikes for B2B retention. (MEDIUM) High-contrast, dark-mode visuals signal 'premium' to tech audiences.",
+          "hypothesis": "By focusing on product education aligned with our belief that 'Consistency matters more than viral spikes for B2B retention.', we will drive engagement with Students.",
+          "topic": "Deep dive into a core feature for ECHO (Healthcare)",
+          "key_message": "Key message about Deep dive into a core feature.",
+          "visual_direction": "Macro photography, detailed, sleek interface elements, high-tech glow, innovative lighting. branded matching ECHO's innovative tone.",
+          "caption_intent": "Write a innovative caption about Deep dive into a core feature."
+        },
+        {
+          "id": "post_8f242b6c",
+          "week_number": 4,
+          "scheduled_date": "2026-02-16T12:29:28.333236",
+          "objective": "hiring_culture",
+          "governing_assumptions": [
+            {
+              "id": "asm_trust",
+              "statement": "Users trust transparent communication over polished marketing.",
+              "supporting_insights": [],
+              "current_confidence": 1.0,
+              "risk_level": "low",
+              "last_validated_at": "2026-01-20T07:28:09.398322",
+              "invalidation_signals": [],
+              "created_at": "2026-01-20T07:28:09.398322",
+              "decay_rate": 0.01,
+              "embedding": null
+            },
+            {
+              "id": "asm_visual",
+              "statement": "High-contrast, dark-mode visuals signal 'premium' to tech audiences.",
+              "supporting_insights": [],
+              "current_confidence": 1.0,
+              "risk_level": "medium",
+              "last_validated_at": "2026-01-20T07:28:09.398322",
+              "invalidation_signals": [],
+              "created_at": "2026-01-20T07:28:09.398322",
+              "decay_rate": 0.01,
+              "embedding": null
+            }
+          ],
+          "risk_notes": "Governed by 2 assumption(s). (LOW) Users trust transparent communication over polished marketing. (MEDIUM) High-contrast, dark-mode visuals signal 'premium' to tech audiences.",
+          "hypothesis": "By focusing on hiring culture aligned with our belief that 'Users trust transparent communication over polished marketing.', we will drive engagement with Musicians.",
+          "topic": "Employee spotlight for ECHO (Healthcare)",
+          "key_message": "Key message about Employee spotlight.",
+          "visual_direction": "Candid, warm, natural lighting, diverse team collaborating, authentic innovative vibe. branded matching ECHO's innovative tone.",
+          "caption_intent": "Write a innovative caption about Employee spotlight."
+        },
+        {
+          "id": "post_1abdb75f",
+          "week_number": 5,
+          "scheduled_date": "2026-02-23T12:29:28.333236",
+          "objective": "thought_leadership",
+          "governing_assumptions": [
+            {
+              "id": "asm_trust",
+              "statement": "Users trust transparent communication over polished marketing.",
+              "supporting_insights": [],
+              "current_confidence": 1.0,
+              "risk_level": "low",
+              "last_validated_at": "2026-01-20T07:28:09.398322",
+              "invalidation_signals": [],
+              "created_at": "2026-01-20T07:28:09.398322",
+              "decay_rate": 0.01,
+              "embedding": null
+            },
+            {
+              "id": "asm_visual",
+              "statement": "High-contrast, dark-mode visuals signal 'premium' to tech audiences.",
+              "supporting_insights": [],
+              "current_confidence": 1.0,
+              "risk_level": "medium",
+              "last_validated_at": "2026-01-20T07:28:09.398322",
+              "invalidation_signals": [],
+              "created_at": "2026-01-20T07:28:09.398322",
+              "decay_rate": 0.01,
+              "embedding": null
+            }
+          ],
+          "risk_notes": "Governed by 2 assumption(s). (LOW) Users trust transparent communication over polished marketing. (MEDIUM) High-contrast, dark-mode visuals signal 'premium' to tech audiences.",
+          "hypothesis": "By focusing on thought leadership aligned with our belief that 'Users trust transparent communication over polished marketing.', we will drive engagement with Gamers.",
+          "topic": "Keynote takeaway for ECHO (Healthcare)",
+          "key_message": "Key message about Keynote takeaway.",
+          "visual_direction": "Minimalist, editorial, bold typography, abstract representation of Healthcare data. branded matching ECHO's innovative tone.",
+          "caption_intent": "Write a innovative caption about Keynote takeaway."
+        }
+      ],
+      "generated_at": "2026-01-20T12:29:28.333236"
+    },
+    "assets": {
+      "post_0c1aec9a": "sandbox_output_4938347915026973781.png",
+      "post_74de02e9": "sandbox_output_8557761185759572607.png",
+      "post_2211710d": "sandbox_output_1648946609100763000.png",
+      "post_8f242b6c": "sandbox_output_7231688411109108950.png",
+      "post_1abdb75f": "sandbox_output_5769951620592409444.png"
+    }
+  }
+}

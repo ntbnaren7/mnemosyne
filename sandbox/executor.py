@@ -1,7 +1,8 @@
 from typing import List, Dict, Any
 from datetime import datetime
-from mnemosyne.core.schemas import ContentBrief, Creative
+from src.monthly_production.schemas import PostBrief
 from .gemini_client import GeminiImageClient
+from .prompt_compiler import PromptCompiler
 
 class GeneratedAsset:
     def __init__(self, path: str, prompt: str, metadata: Dict[str, Any]):
@@ -16,50 +17,30 @@ class ContentExecutor:
     """
     def __init__(self):
         self.client = GeminiImageClient()
+        self.compiler = PromptCompiler()
 
-    def generate_assets(self, brief: ContentBrief) -> List[GeneratedAsset]:
+    def generate_assets(self, brief: PostBrief) -> List[GeneratedAsset]:
         """
-        Generates 5 assets based on the brief.
+        Generates 1 asset based on the semantic brief (One per post for this prototype).
         """
         assets = []
         
-        # 1. Translate Brief to Prompt
-        # Logic: Combine Visual + Narrative + Risk Context
-        base_prompt = (
-            f"Visual Style: {brief.visual_intent}. "
-            f"Subject: {brief.narrative_intent}. "
-            f"Important Context: {brief.risk_notes}. "
-            f"Compose for professional LinkedIn audience."
-        )
+        # 1. Translate Brief to Prompt (Invisible Step)
+        prompt = self.compiler.compile(brief)
         
-        # 2. Generate 5 Variations (Simulated by generic prompt nuances if needed, or just 5 calls)
-        # We will add slight variations to the prompt to force diversity if the model is static? 
-        # Or just rely on seed variance. 
-        # The task says "Convert it into natural-language image prompts". Plural.
+        # 2. Execution
+        print(f"  > Executing Image Generation for Post {brief.id}...")
+        path = self.client.generate_image(prompt)
         
-        variations = [
-            "Wide shot, establishment",
-            "Close up, detail oriented",
-            "Dynamic angle, action",
-            "Minimalist composition",
-            "Warm lighting, human connection"
-        ]
+        # 3. Traceability Metadata
+        meta = {
+            "brief_id": brief.id,
+            "assumptions": [a.id for a in brief.governing_assumptions],
+            "visual_direction": brief.visual_direction,
+            "timestamp": datetime.utcnow().isoformat(),
+            "generator": "Gemini (Auto-Model)"
+        }
         
-        for i, var in enumerate(variations):
-            prompt = f"{base_prompt} ({var})"
-            print(f"  > Executing Prompt {i+1}: {prompt[:60]}...")
-            
-            path = self.client.generate_image(prompt)
-            
-            # 3. Traceability Metadata
-            meta = {
-                "brief_id": brief.id,
-                "assumptions": brief.assumptions_referenced,
-                "visual_intent": brief.visual_intent,
-                "timestamp": datetime.utcnow().isoformat(),
-                "generator": "Gemini (Auto-Model)"
-            }
-            
-            assets.append(GeneratedAsset(path, prompt, meta))
+        assets.append(GeneratedAsset(path, prompt, meta))
             
         return assets

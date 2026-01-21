@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Post Detail - Mnemosyne{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="/plan" style="color: var(--text-secondary); text-decoration: none;">&larr; Back to Plan</a>
+</div>
+
+<div id="postContainer" class="card" style="display: none;">
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+            <div id="postImageContainer"
+                style="background: #181b21; border-radius: 8px; overflow: hidden; position: relative;">
+                <img id="postImage" src="" alt="Generated Content" style="width: 100%; display: block;">
+                <div style="position: absolute; bottom: 1rem; right: 1rem;">
+                    <button class="primary" onclick="openEditor()">Edit Creative</button>
+                </div>
+            </div>
+            <div
+                style="margin-top: 1rem; padding: 1rem; background: rgba(40, 167, 69, 0.1); border: 1px solid var(--success); border-radius: 4px;">
+                <h4 style="color: var(--success); margin: 0 0 0.5rem 0;">Governing Beliefs</h4>
+                <ul id="beliefList" style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem;"></ul>
+            </div>
+        </div>
+
+        <div style="flex: 1; min-width: 300px;">
+            <span id="postObjective" class="badge"></span>
+
+            <h2 id="postTopic" style="margin-top: 0.5rem;"></h2>
+
+            <div style="margin-top: 2rem;">
+                <label>Caption Intent</label>
+                <div id="captionIntent"
+                    style="padding: 1rem; background: var(--bg-primary); border-radius: 4px; color: var(--text-secondary);">
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <label>Risk Notes</label>
+                <div id="riskNotes" style="font-size: 0.9rem; color: #ffc107;"></div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <label>Hypothesis</label>
+                <div id="hypothesis" style="font-size: 0.9rem; font-style: italic; color: var(--text-secondary);"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const postId = "{{ post_id }}";
+
+    async function loadPost() {
+        const response = await fetch('/api/plan/latest');
+        const data = await response.json();
+        const plan = data.plan;
+        const assets = data.assets;
+
+        const post = plan.posts.find(p => p.id === postId);
+        if (!post) return;
+
+        document.getElementById('postContainer').style.display = 'block';
+
+        // Image
+        const assetPath = assets[postId];
+        if (assetPath) {
+            document.getElementById('postImage').src = `/sandbox_images/${assetPath}`;
+        }
+
+        // Metadata
+        document.getElementById('postObjective').innerText = post.objective;
+        document.getElementById('postTopic').innerText = post.topic;
+        document.getElementById('captionIntent').innerText = post.caption_intent;
+        document.getElementById('riskNotes').innerText = post.risk_notes;
+        document.getElementById('hypothesis').innerText = post.hypothesis;
+
+        // Beliefs
+        const list = document.getElementById('beliefList');
+        post.governing_assumptions.forEach(asm => {
+            const li = document.createElement('li');
+            li.innerText = asm.statement;
+            list.appendChild(li);
+        });
+    }
+
+    function openEditor() {
+        window.location.href = `/editor/${postId}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPost);
+</script>
+{% endblock %}

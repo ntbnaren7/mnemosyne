@@ -1,4 +1,6 @@
 import os
+import random
+from PIL import Image, ImageDraw, ImageFont
 from google import genai
 from typing import Optional
 
@@ -23,11 +25,11 @@ class GeminiImageClient:
         Returns: Path to saved image (simulated or real).
         """
         if self.mock_mode:
-            return f"[MOCK IMAGE] Generated for: '{prompt[:30]}...'"
+            return self._generate_mock_placeholder(prompt)
         
         try:
             # CORRECT PATTERN: Use the specific endpoint for Image Generation.
-            # Discovered via brute-force: 'imagen-4.0-generate-001' works for this environment.
+            # 3.0 is missing. 4.0-fast hit quota. Trying 4.0-standard.
             response = self.client.models.generate_images(
                 model='imagen-4.0-generate-001',
                 prompt=prompt,
@@ -36,12 +38,43 @@ class GeminiImageClient:
             
             if response.generated_images:
                 image = response.generated_images[0]
-                filename = f"sandbox_output_{abs(hash(prompt))}.png"
+                # Save to generated_assets directory
+                filename = os.path.join("generated_assets", f"sandbox_output_{abs(hash(prompt))}.png")
                 image.image.save(filename)
-                return filename
+                # Return basename for URL construction if needed, or relative path?
+                # The app serves /sandbox_images/ -> generated_assets/
+                # So if we return "sandbox_output_....png", the frontend needs /sandbox_images/sandbox_output...
+                # If we return "generated_assets/sandbox_output...", frontend might break.
+                # Let's return the relative path for internal logic, and ensure frontend handles it.
+                # Actually, currently it returns "sandbox_output_X.png".
+                # The frontend likely uses `/sandbox_images/{filename}`.
+                # So we should return the BASENAME only, but save to the SUBDIR.
+                return os.path.basename(filename)
             else:
-                 return "[ERROR] No images returned from Gemini."
+                 print("[ERROR] No images returned from Gemini. Falling back to mock.")
+                 return self._generate_mock_placeholder(prompt)
 
         except Exception as e:
-            # Graceful error handling for the UI
-            return f"[ERROR] Generation failed: {str(e)}"
+            # Graceful error handling - return a placeholder instead of crashing or text
+            print(f"[ERROR] Generation failed: {str(e)}")
+            return self._generate_mock_placeholder(prompt)
+
+    def _generate_mock_placeholder(self, prompt: str) -> str:
+        """Helper to create a real image file for the UI to display during errors/mocking."""
+        try:
+            filename = os.path.join("generated_assets", f"sandbox_output_MOCK_{abs(hash(prompt))}.png")
+            
+            # Create a simple image
+            img = Image.new('RGB', (800, 600), color=(30, 30, 35))
+            d = ImageDraw.Draw(img)
+            
+            # Add text
+            d.text((50, 250), "Gemini Generation Failed/Mocked", fill=(200, 200, 200))
+            d.text((50, 300), f"Prompt: {prompt[:40]}...", fill=(150, 150, 150))
+            d.text((50, 350), "(Check Server Logs)", fill=(150, 150, 150))
+            
+            img.save(filename)
+            return os.path.basename(filename)
+        except Exception as e:
+            print(f"Failed to generate mock image: {e}")
+            return "sandbox_output_FALLBACK.png" # Last resort

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Monthly Plan - Mnemosyne{% endblock %}
+
+{% block content %}
+<div id="planContainer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1>Monthly Content Plan</h1>
+        <div class="actions">
+            <button class="primary" onclick="window.print()">Export PDF</button>
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 id="planTitle">Loading...</h2>
+        <p id="planContext" style="color: var(--text-secondary)"></p>
+    </div>
+
+    <div class="grid-5" id="postsGrid">
+        <!-- Posts injected here -->
+    </div>
+</div>
+
+<script>
+    async function loadPlan() {
+        try {
+            const response = await fetch('/api/plan/latest');
+            if (!response.ok) {
+                window.location.href = '/'; // Redirect to setup if no plan
+                return;
+            }
+
+            const data = await response.json();
+            const plan = data.plan;
+            const assets = data.assets;
+
+            document.getElementById('planTitle').innerText = `${plan.month_name} ${plan.year} Plan`;
+            document.getElementById('planContext').innerText = `Strategy for ${plan.company_context.name} (${plan.company_context.industry})`;
+
+            const grid = document.getElementById('postsGrid');
+            grid.innerHTML = '';
+
+            plan.posts.forEach(post => {
+                const assetPath = assets[post.id];
+                // Fix path for static serving if it's strictly local or needs /sandbox route
+                // For now assuming sandbox_output is in the root and we need a way to serve it. 
+                // We need to mount the root or sandbox folder. Assuming /sandbox_images/ mounted.
+
+                const imageUrl = assetPath ? `/sandbox_images/${assetPath}` : '';
+
+                const card = document.createElement('div');
+                card.className = 'post-card';
+                card.onclick = () => window.location.href = `/post/${post.id}`;
+
+                card.innerHTML = `
+                <div class="post-thumb" style="background-image: url('${imageUrl}')">
+                    ${!imageUrl ? '<span>No Image</span>' : ''}
+                </div>
+                <div class="post-content">
+                    <span class="badge">${post.objective}</span>
+                    <h3 style="font-size: 1rem; margin-bottom: 0.5rem">Week ${post.week_number}</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">${post.topic}</p>
+                </div>
+            `;
+                grid.appendChild(card);
+            });
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPlan);
+</script>
+{% endblock %}
