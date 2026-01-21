@@ -16,3 +16,7 @@ PROJECT_STATE_REPORT.md
 V2_FREEZE_DECLARATION.md
 task.md
 walkthrough.md
+
+# Generated Images
+generated_assets/
+test_gen.png
